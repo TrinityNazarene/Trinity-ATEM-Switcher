@@ -5,8 +5,158 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Trinity_ATEM_Switcher"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        Title="MainWindow" Height="1024" Width="1920">
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Row="0" Grid.RowSpan="3" Grid.Column="2" Width="50" Margin="10,30,10,30">
+            <Slider Orientation="Vertical" HorizontalAlignment="Center" />
+        </Grid>
+        <Grid Grid.Row="0" Grid.Column="0" Margin="10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Text="Program" />
+            <Button x:Name="progBut1" Grid.Row="1" Grid.Column="0" Tag="2" Content="Camera 1" Click="progBut_Click"/>
+            <Button x:Name="progBut2" Grid.Row="1" Grid.Column="1" Tag="3" Content="Camera 2" Click="progBut_Click"/>
+            <Button x:Name="progBut3" Grid.Row="1" Grid.Column="2" Tag="4" Content="Slides" Click="progBut_Click"/>
+            <Button x:Name="progBut4" Grid.Row="2" Grid.Column="0" Tag="5" Content="Camera 3" Click="progBut_Click"/>
+            <Button x:Name="progBut5" Grid.Row="2" Grid.Column="1" Tag="6" Content="Camera 4" Click="progBut_Click"/>
+            <Button x:Name="progBut6" Grid.Row="2" Grid.Column="2" Tag="3010" Content="Announcements" Click="progBut_Click"/>
+        </Grid>
+        <Grid Grid.Row="1" Grid.Column="0" Margin="10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Text="Slide Insert" />
+            <Button Grid.Row="1" Grid.Column="0" Content="Full"/>
+            <Button Grid.Row="1" Grid.Column="1" Content="Words"/>
+            <Button Grid.Row="1" Grid.Column="2" Content="Green Screen"/>
+            <Button Grid.Row="2" Grid.Column="0" Content="Left"/>
+            <Button Grid.Row="2" Grid.Column="1" Content="Clear"/>
+            <Button Grid.Row="2" Grid.Column="2" Content="Right"/>
+        </Grid>        
+        <Grid Grid.Row="2" Grid.Column="0" Margin="10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Text="Preview" />
+            <Button x:Name="prevBut1" Grid.Row="1" Grid.Column="0" Tag="2" Content="Camera 1" Click="prevBut_Click"/>
+            <Button x:Name="prevBut2" Grid.Row="1" Grid.Column="1" Tag="3" Content="Camera 2" Click="prevBut_Click"/>
+            <Button x:Name="prevBut3" Grid.Row="1" Grid.Column="2" Tag="4" Content="Slides" Click="prevBut_Click"/>
+            <Button x:Name="prevBut4" Grid.Row="2" Grid.Column="0" Tag="5" Content="Camera 3" Click="prevBut_Click"/>
+            <Button x:Name="prevBut5" Grid.Row="2" Grid.Column="1" Tag="6" Content="Camera 4" Click="prevBut_Click"/>
+            <Button x:Name="prevBut6" Grid.Row="2" Grid.Column="2" Tag="3010" Content="Announcements" Click="prevBut_Click"/>
+        </Grid>
+        <Grid Grid.Row="0" Grid.Column="1" Margin="10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Text="Sancuary Screens" />
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="0" Content="Normal" />
+                <Button Grid.Column="1" Content="I-Mag" />
+                <Button Grid.Column="2" Content="Pre/Post" />
+            </Grid>
+            <Grid Grid.Row="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Button Grid.Row="0" Grid.Column="0" Content="Camera 1"/>
+                <Button Grid.Row="0" Grid.Column="1" Content="Camera 2"/>
+                <Button Grid.Row="0" Grid.Column="2" Content="Slides"/>
+                <Button Grid.Row="1" Grid.Column="0" Content="Camera 3"/>
+                <Button Grid.Row="2" Grid.Column="1" Content="Camera 4"/>
+                <Button Grid.Row="3" Grid.Column="2" Content="Announcements"/>
+            </Grid>
+        </Grid>
+        <Grid Grid.Row="1" Grid.Column="1" Margin="10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Text="Broadcast" />
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="0" Content="Normal" />
+                <Button Grid.Column="1" Content="Bypass" />
+            </Grid>
+            <Grid Grid.Row="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Button Grid.Row="0" Grid.Column="0" Content="Camera 1"/>
+                <Button Grid.Row="0" Grid.Column="1" Content="Camera 2"/>
+                <Button Grid.Row="0" Grid.Column="2" Content="Slides"/>
+                <Button Grid.Row="1" Grid.Column="0" Content="Camera 3"/>
+                <Button Grid.Row="2" Grid.Column="1" Content="Camera 4"/>
+                <Button Grid.Row="3" Grid.Column="2" Content="Announcements"/>
+            </Grid>
+        </Grid>
+        <Grid Grid.Row="2" Grid.Column="1" Margin="10,80,10,10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Button Grid.Row="0" Grid.Column="0" Content="Auto" />
+            <Button Grid.Row="0" Grid.Column="1" Content="Cut" />
+            <Button Grid.Row="0" Grid.Column="3" Content="Fade To Black" />
+        </Grid>
     </Grid>
 </Window>
