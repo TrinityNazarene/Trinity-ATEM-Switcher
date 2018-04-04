@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using BMDSwitcherAPI;
 using System.Runtime.InteropServices;
+using System.Timers;
 
 namespace Trinity_ATEM_Switcher
 {
@@ -26,7 +27,6 @@ namespace Trinity_ATEM_Switcher
         private IBMDSwitcherDiscovery m_switcherDiscovery;
         private IBMDSwitcher m_switcher;
         private IBMDSwitcherMixEffectBlock m_mixEffectBlock1;
-
         private SwitcherMonitor m_switcherMonitor;
         private MixEffectBlockMonitor m_mixEffectBlockMonitor;
         private IBMDSwitcherTransitionParameters m_transition;
@@ -34,6 +34,9 @@ namespace Trinity_ATEM_Switcher
         private bool m_currentTransitionReachedHalfway = false;
         private _BMDSwitcherTransitionStyle existing_style;
         private List<InputMonitor> m_inputMonitors = new List<InputMonitor>();
+        private long currentPreview;
+        private long currentKey;
+        private static Timer transTimer;
         public MainWindow()
         {
             InitializeComponent();
@@ -163,6 +166,10 @@ namespace Trinity_ATEM_Switcher
             getInputNames();
             //UpdateTransitionFramesRemaining();
             //UpdateSliderPosition();
+
+            //setCurrent preview ID
+            m_mixEffectBlock1.GetInt(_BMDSwitcherMixEffectBlockPropertyId.bmdSwitcherMixEffectBlockPropertyIdPreviewInput, out currentPreview);
+            currentKey = -1;
         }
 
         private void getInputNames()
@@ -245,7 +252,44 @@ namespace Trinity_ATEM_Switcher
             }
         }
 
+        private void ChangeAUX(int AuxNumber, long inputId )
+        {
+           
+            Console.WriteLine("AuxNumber=" + AuxNumber + " inputId=" + inputId);
+            IBMDSwitcherInputIterator inputIterator = null;
+            IntPtr inputIteratorPtr;
+            Guid inputIteratorIID = typeof(IBMDSwitcherInputIterator).GUID;
+            this.m_switcher.CreateIterator(ref inputIteratorIID, out inputIteratorPtr);
+            if (inputIteratorPtr != null)
+            {
+                inputIterator = (IBMDSwitcherInputIterator)Marshal.GetObjectForIUnknown(inputIteratorPtr);
+            }
 
+            if (inputIterator != null)
+            {
+                IBMDSwitcherInput input;
+                inputIterator.Next(out input);
+                int AUXCount = 0;
+                while (input != null)
+                {
+                    BMDSwitcherAPI._BMDSwitcherPortType inputPortType;
+                    input.GetPortType(out inputPortType);
+                    if (inputPortType == BMDSwitcherAPI._BMDSwitcherPortType.bmdSwitcherPortTypeAuxOutput)
+                    {
+                        AUXCount++;
+                        if (AUXCount == AuxNumber)
+                        {
+                            IBMDSwitcherInputAux WkAux = (IBMDSwitcherInputAux)input;
+                            WkAux.SetInputSource(inputId);
+                            break;
+                        }
+                    }
+                    inputIterator.Next(out input);
+                }
+            }
+
+
+        }
 
         private void progBut_Click(object sender, RoutedEventArgs e)
         {
@@ -268,7 +312,219 @@ namespace Trinity_ATEM_Switcher
             {
                 m_mixEffectBlock1.SetInt(_BMDSwitcherMixEffectBlockPropertyId.bmdSwitcherMixEffectBlockPropertyIdPreviewInput,
                    butNum);
+                currentPreview = butNum;
             }
+        }
+
+        private void Aux_Click(object sender, RoutedEventArgs e)
+        {
+            var button = sender as Button;
+            string butVals = button.Tag as string;
+            string[] namesArray = butVals.Split(',');
+            int auxNum = Convert.ToInt32(namesArray[0]);
+            int inputId = Convert.ToInt32(namesArray[1]);
+            ChangeAUX(auxNum, inputId);
+        }
+
+        private void autoBut_Click(object sender, RoutedEventArgs e)
+        {
+            if (m_mixEffectBlock1 != null)
+            {
+                m_mixEffectBlock1.PerformAutoTransition();
+            }
+        }
+
+        private void cutBut_Click(object sender, RoutedEventArgs e)
+        {
+            if (m_mixEffectBlock1 != null)
+            {
+                m_mixEffectBlock1.PerformCut();
+            }
+        }
+
+        private void fadeBlackBut_Click(object sender, RoutedEventArgs e)
+        {
+            if (m_mixEffectBlock1 != null)
+            {
+                m_mixEffectBlock1.PerformFadeToBlack();
+            }
+        }
+
+        private void Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (m_mixEffectBlock1 != null)
+            {
+                double position = trackBarTransitionPos.Value / 100.0;
+                if (m_moveSliderDownwards)
+                    position = (100 - trackBarTransitionPos.Value) / 100.0;
+
+                m_mixEffectBlock1.SetFloat(_BMDSwitcherMixEffectBlockPropertyId.bmdSwitcherMixEffectBlockPropertyIdTransitionPosition,
+                    position);
+            }
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            
+        }
+
+        private void keyWordsBut_Click(object sender, RoutedEventArgs e)
+        {
+            m_transition = (BMDSwitcherAPI.IBMDSwitcherTransitionParameters)m_mixEffectBlock1;
+            _BMDSwitcherTransitionSelection transitionselection;
+            m_transition.GetNextTransitionSelection(out transitionselection);
+            string stringtransitionselection = transitionselection.ToString();
+            m_transition.SetNextTransitionSelection(_BMDSwitcherTransitionSelection.bmdSwitcherTransitionSelectionBackground + 1);
+            if (m_mixEffectBlock1 != null)
+            {
+                m_mixEffectBlock1.PerformAutoTransition();
+            }
+            if (stringtransitionselection != "bmdSwitcherTransitionSelectionBackground")
+            {
+                m_transition.GetNextTransitionStyle(out existing_style);
+                m_transition.SetNextTransitionStyle(_BMDSwitcherTransitionStyle.bmdSwitcherTransitionStyleMix);
+                m_mixEffectBlock1.PerformAutoTransition();
+            }
+            m_mixEffectBlock1.SetInt(_BMDSwitcherMixEffectBlockPropertyId.bmdSwitcherMixEffectBlockPropertyIdPreviewInput,
+                 currentPreview);
+
+            System.Threading.Thread.Sleep(100);
+            m_transition.SetNextTransitionSelection(_BMDSwitcherTransitionSelection.bmdSwitcherTransitionSelectionBackground);
+            currentKey = 1;
+
+
+        }
+
+        
+        private void keyClearBut_Click(object sender, RoutedEventArgs e)
+        {
+            if (currentKey!= -1) { 
+            m_transition = (BMDSwitcherAPI.IBMDSwitcherTransitionParameters)m_mixEffectBlock1;
+            _BMDSwitcherTransitionSelection transitionselection;
+            m_transition.GetNextTransitionSelection(out transitionselection);
+            string stringtransitionselection = transitionselection.ToString();
+
+            switch (currentKey)
+            {
+                case 1:
+                    m_transition.SetNextTransitionSelection(_BMDSwitcherTransitionSelection.bmdSwitcherTransitionSelectionBackground + 1);
+                    
+                    break;
+                case 2:
+                    m_transition.SetNextTransitionSelection(_BMDSwitcherTransitionSelection.bmdSwitcherTransitionSelectionKey2);
+                    
+                    break;
+                case 3:
+                    m_transition.SetNextTransitionSelection(_BMDSwitcherTransitionSelection.bmdSwitcherTransitionSelectionKey3);
+                    break;
+                case 4:
+                    m_transition.SetNextTransitionSelection(_BMDSwitcherTransitionSelection.bmdSwitcherTransitionSelectionKey4);
+                    break;
+            }
+            if (m_mixEffectBlock1 != null)
+            {
+                m_mixEffectBlock1.PerformAutoTransition();
+            }
+            if (stringtransitionselection != "bmdSwitcherTransitionSelectionBackground")
+            {
+                m_transition.GetNextTransitionStyle(out existing_style);
+                m_transition.SetNextTransitionStyle(_BMDSwitcherTransitionStyle.bmdSwitcherTransitionStyleMix);
+                m_mixEffectBlock1.PerformAutoTransition();
+            }
+            m_mixEffectBlock1.SetInt(_BMDSwitcherMixEffectBlockPropertyId.bmdSwitcherMixEffectBlockPropertyIdPreviewInput,
+                 currentPreview);
+
+            System.Threading.Thread.Sleep(100);
+            m_transition.SetNextTransitionSelection(_BMDSwitcherTransitionSelection.bmdSwitcherTransitionSelectionBackground);
+            currentKey = -1;
+            }
+        }
+
+        private void keyLeftBut_Click(object sender, RoutedEventArgs e)
+        {
+
+            m_transition = (BMDSwitcherAPI.IBMDSwitcherTransitionParameters)m_mixEffectBlock1;
+            _BMDSwitcherTransitionSelection transitionselection;
+            m_transition.GetNextTransitionSelection(out transitionselection);
+            string stringtransitionselection = transitionselection.ToString();
+            m_transition.SetNextTransitionSelection(_BMDSwitcherTransitionSelection.bmdSwitcherTransitionSelectionKey2);
+            if (m_mixEffectBlock1 != null)
+            {
+                m_mixEffectBlock1.PerformAutoTransition();
+            }
+            if (stringtransitionselection != "bmdSwitcherTransitionSelectionBackground")
+            {
+                m_transition.GetNextTransitionStyle(out existing_style);
+                m_transition.SetNextTransitionStyle(_BMDSwitcherTransitionStyle.bmdSwitcherTransitionStyleMix);
+                m_mixEffectBlock1.PerformAutoTransition();
+            }
+            m_mixEffectBlock1.SetInt(_BMDSwitcherMixEffectBlockPropertyId.bmdSwitcherMixEffectBlockPropertyIdPreviewInput,
+                 currentPreview);
+
+            System.Threading.Thread.Sleep(100);
+            m_transition.SetNextTransitionSelection(_BMDSwitcherTransitionSelection.bmdSwitcherTransitionSelectionBackground);
+            currentKey = 2;
+        }
+
+        private void keyRightBut_Click(object sender, RoutedEventArgs e)
+        {
+            m_transition = (BMDSwitcherAPI.IBMDSwitcherTransitionParameters)m_mixEffectBlock1;
+            _BMDSwitcherTransitionSelection transitionselection;
+            m_transition.GetNextTransitionSelection(out transitionselection);
+            string stringtransitionselection = transitionselection.ToString();
+            m_transition.SetNextTransitionSelection(_BMDSwitcherTransitionSelection.bmdSwitcherTransitionSelectionKey3);
+            if (m_mixEffectBlock1 != null)
+            {
+                m_mixEffectBlock1.PerformAutoTransition();
+            }
+            if (stringtransitionselection != "bmdSwitcherTransitionSelectionBackground")
+            {
+                m_transition.GetNextTransitionStyle(out existing_style);
+                m_transition.SetNextTransitionStyle(_BMDSwitcherTransitionStyle.bmdSwitcherTransitionStyleMix);
+                m_mixEffectBlock1.PerformAutoTransition();
+            }
+            m_mixEffectBlock1.SetInt(_BMDSwitcherMixEffectBlockPropertyId.bmdSwitcherMixEffectBlockPropertyIdPreviewInput,
+                 currentPreview);
+
+            System.Threading.Thread.Sleep(100);
+            m_transition.SetNextTransitionSelection(_BMDSwitcherTransitionSelection.bmdSwitcherTransitionSelectionBackground);
+            currentKey = 3;
+        }
+
+        private void keyFullBut_Click(object sender, RoutedEventArgs e)
+        {
+            keyClearBut_Click(this, null);
+            if (m_mixEffectBlock1 != null)
+            {
+                m_mixEffectBlock1.SetInt(_BMDSwitcherMixEffectBlockPropertyId.bmdSwitcherMixEffectBlockPropertyIdProgramInput,
+                   6);
+            }
+
+        }
+
+        private void keyGreenScreenBut_Click(object sender, RoutedEventArgs e)
+        {
+            m_transition = (BMDSwitcherAPI.IBMDSwitcherTransitionParameters)m_mixEffectBlock1;
+            _BMDSwitcherTransitionSelection transitionselection;
+            m_transition.GetNextTransitionSelection(out transitionselection);
+            string stringtransitionselection = transitionselection.ToString();
+            m_transition.SetNextTransitionSelection(_BMDSwitcherTransitionSelection.bmdSwitcherTransitionSelectionKey4);
+            if (m_mixEffectBlock1 != null)
+            {
+                m_mixEffectBlock1.PerformAutoTransition();
+            }
+            if (stringtransitionselection != "bmdSwitcherTransitionSelectionBackground")
+            {
+                m_transition.GetNextTransitionStyle(out existing_style);
+                m_transition.SetNextTransitionStyle(_BMDSwitcherTransitionStyle.bmdSwitcherTransitionStyleMix);
+                m_mixEffectBlock1.PerformAutoTransition();
+            }
+            m_mixEffectBlock1.SetInt(_BMDSwitcherMixEffectBlockPropertyId.bmdSwitcherMixEffectBlockPropertyIdPreviewInput,
+                 currentPreview);
+
+            System.Threading.Thread.Sleep(100);
+            m_transition.SetNextTransitionSelection(_BMDSwitcherTransitionSelection.bmdSwitcherTransitionSelectionBackground);
+            currentKey = 4;
         }
     }
 }

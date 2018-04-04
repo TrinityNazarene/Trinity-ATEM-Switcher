@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Trinity_ATEM_Switcher"
         mc:Ignorable="d"
-        Title="MainWindow" Height="1024" Width="1920">
+        Title="Trinity ATEM Switcher" WindowState="Maximized" Width="1920" Height="1024">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
@@ -18,7 +18,7 @@
             <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
         <Grid Grid.Row="0" Grid.RowSpan="3" Grid.Column="2" Width="50" Margin="10,30,10,30">
-            <Slider Orientation="Vertical" HorizontalAlignment="Center" />
+            <Slider x:Name="trackBarTransitionPos" Orientation="Vertical" HorizontalAlignment="Center" ValueChanged="Slider_ValueChanged" Maximum="100" FontSize="18"/>
         </Grid>
         <Grid Grid.Row="0" Grid.Column="0" Margin="10">
             <Grid.RowDefinitions>
@@ -31,13 +31,13 @@
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Text="Program" />
-            <Button x:Name="progBut1" Grid.Row="1" Grid.Column="0" Tag="2" Content="Camera 1" Click="progBut_Click"/>
-            <Button x:Name="progBut2" Grid.Row="1" Grid.Column="1" Tag="3" Content="Camera 2" Click="progBut_Click"/>
-            <Button x:Name="progBut3" Grid.Row="1" Grid.Column="2" Tag="4" Content="Slides" Click="progBut_Click"/>
-            <Button x:Name="progBut4" Grid.Row="2" Grid.Column="0" Tag="5" Content="Camera 3" Click="progBut_Click"/>
-            <Button x:Name="progBut5" Grid.Row="2" Grid.Column="1" Tag="6" Content="Camera 4" Click="progBut_Click"/>
-            <Button x:Name="progBut6" Grid.Row="2" Grid.Column="2" Tag="3010" Content="Announcements" Click="progBut_Click"/>
+            <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Text="Program" FontWeight="Bold" FontSize="24" />
+            <Button x:Name="progBut1" Grid.Row="1" Grid.Column="0" Tag="2" Content="Camera 1" Click="progBut_Click" FontWeight="Bold" FontSize="24"/>
+            <Button x:Name="progBut2" Grid.Row="1" Grid.Column="1" Tag="3" Content="Camera 2" Click="progBut_Click" FontWeight="Bold" FontSize="24"/>
+            <Button x:Name="progBut3" Grid.Row="1" Grid.Column="2" Tag="4" Content="Slides" Click="progBut_Click" FontWeight="Bold" FontSize="24"/>
+            <Button x:Name="progBut4" Grid.Row="2" Grid.Column="0" Tag="5" Content="Camera 3" Click="progBut_Click" FontWeight="Bold" FontSize="24"/>
+            <Button x:Name="progBut5" Grid.Row="2" Grid.Column="1" Tag="6" Content="Camera 4" Click="progBut_Click" FontWeight="Bold" FontSize="24"/>
+            <Button x:Name="progBut6" Grid.Row="2" Grid.Column="2" Tag="3010" Content="Announcements" Click="progBut_Click" FontWeight="Bold" FontSize="24"/>
         </Grid>
         <Grid Grid.Row="1" Grid.Column="0" Margin="10">
             <Grid.RowDefinitions>
@@ -50,14 +50,14 @@
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Text="Slide Insert" />
-            <Button Grid.Row="1" Grid.Column="0" Content="Full"/>
-            <Button Grid.Row="1" Grid.Column="1" Content="Words"/>
-            <Button Grid.Row="1" Grid.Column="2" Content="Green Screen"/>
-            <Button Grid.Row="2" Grid.Column="0" Content="Left"/>
-            <Button Grid.Row="2" Grid.Column="1" Content="Clear"/>
-            <Button Grid.Row="2" Grid.Column="2" Content="Right"/>
-        </Grid>        
+            <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Text="Slide Insert" FontSize="24" FontWeight="Bold" />
+            <Button x:Name="keyFullBut" Grid.Row="1" Grid.Column="0" Content="Full" FontSize="24" FontWeight="Bold" Click="keyFullBut_Click"/>
+            <Button x:Name="keyWordsBut" Grid.Row="1" Grid.Column="1" Content="Words" FontSize="24" FontWeight="Bold" Click="keyWordsBut_Click"/>
+            <Button x:Name="keyGreenScreenBut" Grid.Row="1" Grid.Column="2" Content="Green Screen" FontSize="24" FontWeight="Bold" Click="keyGreenScreenBut_Click"/>
+            <Button x:Name="keyLeftBut" Grid.Row="2" Grid.Column="0" Content="Left" FontSize="24" FontWeight="Bold" Click="keyLeftBut_Click"/>
+            <Button x:Name="keyClearBut" Grid.Row="2" Grid.Column="1" Content="Clear" FontSize="24" FontWeight="Bold" Click="keyClearBut_Click"/>
+            <Button x:Name="keyRightBut" Grid.Row="2" Grid.Column="2" Content="Right" FontSize="24" FontWeight="Bold" Click="keyRightBut_Click"/>
+        </Grid>
         <Grid Grid.Row="2" Grid.Column="0" Margin="10">
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto" />
@@ -70,13 +70,13 @@
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Text="Preview" />
-            <Button x:Name="prevBut1" Grid.Row="1" Grid.Column="0" Tag="2" Content="Camera 1" Click="prevBut_Click"/>
-            <Button x:Name="prevBut2" Grid.Row="1" Grid.Column="1" Tag="3" Content="Camera 2" Click="prevBut_Click"/>
-            <Button x:Name="prevBut3" Grid.Row="1" Grid.Column="2" Tag="4" Content="Slides" Click="prevBut_Click"/>
-            <Button x:Name="prevBut4" Grid.Row="2" Grid.Column="0" Tag="5" Content="Camera 3" Click="prevBut_Click"/>
-            <Button x:Name="prevBut5" Grid.Row="2" Grid.Column="1" Tag="6" Content="Camera 4" Click="prevBut_Click"/>
-            <Button x:Name="prevBut6" Grid.Row="2" Grid.Column="2" Tag="3010" Content="Announcements" Click="prevBut_Click"/>
+            <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Text="Preview" FontSize="24" FontWeight="Bold" />
+            <Button x:Name="prevBut1" Grid.Row="1" Grid.Column="0" Tag="2" Content="Camera 1" Click="prevBut_Click" FontSize="24" FontWeight="Bold"/>
+            <Button x:Name="prevBut2" Grid.Row="1" Grid.Column="1" Tag="3" Content="Camera 2" Click="prevBut_Click" FontSize="24" FontWeight="Bold"/>
+            <Button x:Name="prevBut3" Grid.Row="1" Grid.Column="2" Tag="4" Content="Slides" Click="prevBut_Click" FontSize="24" FontWeight="Bold"/>
+            <Button x:Name="prevBut4" Grid.Row="2" Grid.Column="0" Tag="5" Content="Camera 3" Click="prevBut_Click" FontSize="24" FontWeight="Bold"/>
+            <Button x:Name="prevBut5" Grid.Row="2" Grid.Column="1" Tag="6" Content="Camera 4" Click="prevBut_Click" FontSize="24" FontWeight="Bold"/>
+            <Button x:Name="prevBut6" Grid.Row="2" Grid.Column="2" Tag="3010" Content="Announcements" Click="prevBut_Click" FontSize="24" FontWeight="Bold"/>
         </Grid>
         <Grid Grid.Row="0" Grid.Column="1" Margin="10">
             <Grid.RowDefinitions>
@@ -84,16 +84,16 @@
                 <RowDefinition Height="*" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Text="Sancuary Screens" />
+            <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Text="Sancuary Screens" FontSize="24" FontWeight="Bold" />
             <Grid Grid.Row="1">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-                <Button Grid.Column="0" Content="Normal" />
-                <Button Grid.Column="1" Content="I-Mag" />
-                <Button Grid.Column="2" Content="Pre/Post" />
+                <Button x:Name="aux1But1" Grid.Column="0" Tag="1,6" Content="Normal" FontSize="24" FontWeight="Bold" Click="Aux_Click" />
+                <Button x:Name="aux1But2" Grid.Column="1" Tag="1,10010" Content="I-Mag" FontSize="24" FontWeight="Bold" Click="Aux_Click" />
+                <Button x:Name="aux1But3" Grid.Column="2" Tag="1,3010" Content="Pre/Post" FontSize="24" FontWeight="Bold" Click="Aux_Click" />
             </Grid>
             <Grid Grid.Row="2">
                 <Grid.RowDefinitions>
@@ -105,12 +105,12 @@
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-                <Button Grid.Row="0" Grid.Column="0" Content="Camera 1"/>
-                <Button Grid.Row="0" Grid.Column="1" Content="Camera 2"/>
-                <Button Grid.Row="0" Grid.Column="2" Content="Slides"/>
-                <Button Grid.Row="1" Grid.Column="0" Content="Camera 3"/>
-                <Button Grid.Row="2" Grid.Column="1" Content="Camera 4"/>
-                <Button Grid.Row="3" Grid.Column="2" Content="Announcements"/>
+                <Button x:Name="aux1But4" Grid.Row="0" Grid.Column="0" Tag="1,2" Content="Camera 1" FontSize="24" FontWeight="Bold" Click="Aux_Click"/>
+                <Button x:Name="aux1But5" Grid.Row="0" Grid.Column="1" Tag="1,3" Content="Camera 2" FontSize="24" FontWeight="Bold" Click="Aux_Click"/>
+                <Button x:Name="aux1But6" Grid.Row="0" Grid.Column="2" Tag="1,6" Content="Slides" FontSize="24" FontWeight="Bold" Click="Aux_Click"/>
+                <Button x:Name="aux1But7" Grid.Row="1" Grid.Column="0" Tag="1,4" Content="Camera 3" FontSize="24" FontWeight="Bold" Click="Aux_Click"/>
+                <Button x:Name="aux1But8" Grid.Row="2" Grid.Column="1" Tag="1,5" Content="Camera 4" FontSize="24" FontWeight="Bold" Click="Aux_Click"/>
+                <Button x:Name="aux1But9" Grid.Row="3" Grid.Column="2" Tag="1,3010" Content="Announcements" FontSize="24" FontWeight="Bold" Click="Aux_Click"/>
             </Grid>
         </Grid>
         <Grid Grid.Row="1" Grid.Column="1" Margin="10">
@@ -120,14 +120,14 @@
                 <RowDefinition Height="*" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Text="Broadcast" />
+            <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Text="Broadcast" FontSize="24" FontWeight="Bold" />
             <Grid Grid.Row="1">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-                <Button Grid.Column="0" Content="Normal" />
-                <Button Grid.Column="1" Content="Bypass" />
+                <Button Grid.Column="0" Tag="3,10010" Content="Normal" FontSize="24" FontWeight="Bold" Click="Aux_Click"/>
+                <Button Grid.Column="1" Tag="3,3010" Content="Bypass" FontSize="24" FontWeight="Bold" Click="Aux_Click"/>
             </Grid>
             <Grid Grid.Row="2">
                 <Grid.RowDefinitions>
@@ -139,12 +139,12 @@
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-                <Button Grid.Row="0" Grid.Column="0" Content="Camera 1"/>
-                <Button Grid.Row="0" Grid.Column="1" Content="Camera 2"/>
-                <Button Grid.Row="0" Grid.Column="2" Content="Slides"/>
-                <Button Grid.Row="1" Grid.Column="0" Content="Camera 3"/>
-                <Button Grid.Row="2" Grid.Column="1" Content="Camera 4"/>
-                <Button Grid.Row="3" Grid.Column="2" Content="Announcements"/>
+                <Button Grid.Row="0" Grid.Column="0" Tag="3,2" Content="Camera 1" FontSize="24" FontWeight="Bold" Click="Aux_Click"/>
+                <Button Grid.Row="0" Grid.Column="1" Tag="3,3" Content="Camera 2" FontSize="24" FontWeight="Bold" Click="Aux_Click"/>
+                <Button Grid.Row="0" Grid.Column="2" Tag="3,6" Content="Slides" FontSize="24" FontWeight="Bold" Click="Aux_Click"/>
+                <Button Grid.Row="1" Grid.Column="0" Tag="3,4" Content="Camera 3" FontSize="24" FontWeight="Bold" Click="Aux_Click"/>
+                <Button Grid.Row="2" Grid.Column="1" Tag="3,5" Content="Camera 4" FontSize="24" FontWeight="Bold" Click="Aux_Click"/>
+                <Button Grid.Row="3" Grid.Column="2" Tag="3,3010" Content="Announcements" FontSize="24" FontWeight="Bold" Click="Aux_Click"/>
             </Grid>
         </Grid>
         <Grid Grid.Row="2" Grid.Column="1" Margin="10,80,10,10">
@@ -154,9 +154,9 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <Button Grid.Row="0" Grid.Column="0" Content="Auto" />
-            <Button Grid.Row="0" Grid.Column="1" Content="Cut" />
-            <Button Grid.Row="0" Grid.Column="3" Content="Fade To Black" />
+            <Button x:Name="autoBut" Grid.Row="0" Grid.Column="0" Content="Auto" FontSize="24" FontWeight="Bold" Click="autoBut_Click"/>
+            <Button x:Name="cutBut" Grid.Row="0" Grid.Column="1" Content="Cut" FontSize="24" FontWeight="Bold" Click="cutBut_Click" />
+            <Button x:Name="fadeBlackBut" Grid.Row="0" Grid.Column="3" Content="Fade To Black" FontSize="24" FontWeight="Bold" Click="fadeBlackBut_Click" />
         </Grid>
     </Grid>
 </Window>
