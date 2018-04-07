@@ -5,8 +5,194 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Trinity_ATEM_Switcher"
         mc:Ignorable="d"
-        Title="Trinity ATEM Switcher" WindowState="Maximized" Width="1920" Height="1024">
-    <Grid>
+        Title="Trinity ATEM Switcher" WindowState="Maximized" Width="1920" Height="1024" Background="#FF252526">
+    <Window.Resources>
+        <Style x:Key="FocusVisual">
+            <Setter Property="Control.Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <Rectangle Margin="2" SnapsToDevicePixels="true" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" StrokeThickness="1" StrokeDashArray="1 2"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <LinearGradientBrush x:Key="Button.Pressed.RedBackground" EndPoint="0.5,1" StartPoint="0.5,0">
+            <GradientStop Color="#FFDE6767" Offset="0"/>
+            <GradientStop Color="#FFA80E0E" Offset="1"/>
+        </LinearGradientBrush>
+        <LinearGradientBrush x:Key="Button.MouseOver.RedBackground" EndPoint="0.5,1" StartPoint="0.5,0">
+            <GradientStop Color="#FFDC5555" Offset="0"/>
+            <GradientStop Color="#FFCC6565" Offset="1"/>
+        </LinearGradientBrush>
+        <LinearGradientBrush x:Key="Button.Pressed.GreenBackground" EndPoint="0.5,1" StartPoint="0.5,0">
+            <GradientStop Color="#FF72DE67" Offset="0"/>
+            <GradientStop Color="#FF1CA80E" Offset="1"/>
+        </LinearGradientBrush>
+        <LinearGradientBrush x:Key="Button.MouseOver.GreenBackground" EndPoint="0.5,1" StartPoint="0.5,0">
+            <GradientStop Color="#FF9CE851" Offset="0"/>
+            <GradientStop Color="#FF59A34F" Offset="1"/>
+        </LinearGradientBrush>
+        <LinearGradientBrush x:Key="Button.Pressed.YellowBackground" EndPoint="0.5,1" StartPoint="0.5,0">
+            <GradientStop Color="#FFDEAB31" Offset="0"/>
+            <GradientStop Color="#FFEA8A0C" Offset="1"/>
+        </LinearGradientBrush>
+        <LinearGradientBrush x:Key="Button.MouseOver.YellowBackground" EndPoint="0.5,1" StartPoint="0.5,0">
+            <GradientStop Color="#FFDFAD56" Offset="0"/>
+            <GradientStop Color="#FFC78A29" Offset="1"/>
+        </LinearGradientBrush>
+        <SolidColorBrush x:Key="Button.Static.Background" Color="#FFDDDDDD"/>
+        <SolidColorBrush x:Key="Button.Static.Border" Color="#FF707070"/>
+        <SolidColorBrush x:Key="Button.MouseOver.RedBorder" Color="#FF800808"/>
+        <SolidColorBrush x:Key="Button.Pressed.RedBorder" Color="#FF800808"/>
+        <SolidColorBrush x:Key="Button.MouseOver.GreenBorder" Color="#FF088013"/>
+        <SolidColorBrush x:Key="Button.Pressed.GreenBorder" Color="#FF088013"/>
+        <SolidColorBrush x:Key="Button.Disabled.Background" Color="#FFF4F4F4"/>
+        <SolidColorBrush x:Key="Button.MouseOver.YellowBorder" Color="#FFC6A808"/>
+        <SolidColorBrush x:Key="Button.Pressed.YellowBorder" Color="#FFC6A808"/>
+        <SolidColorBrush x:Key="Button.Disabled.Border" Color="#FFADB2B5"/>
+        <SolidColorBrush x:Key="Button.Disabled.Foreground" Color="#FF838383"/>
+        <Style TargetType="{x:Type ToggleButton}" x:Key="RedToggleButton">
+            <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
+            <Setter Property="Background" Value="{StaticResource Button.Static.Background}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource Button.Static.Border}"/>
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="1"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ToggleButton}">
+                        <Border x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="true">
+                            <ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="Button.IsDefaulted" Value="true">
+                                <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.MouseOver.RedBackground}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.MouseOver.RedBorder}"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="true">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Pressed.RedBackground}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Pressed.RedBorder}"/>
+                            </Trigger>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Pressed.RedBackground}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Pressed.RedBorder}"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Opacity" TargetName="border" Value="0.7"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style TargetType="{x:Type ToggleButton}" x:Key="GreenToggleButton">
+            <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
+            <Setter Property="Background" Value="{StaticResource Button.Static.Background}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource Button.Static.Border}"/>
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="1"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ToggleButton}">
+                        <Border x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="true">
+                            <ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="Button.IsDefaulted" Value="true">
+                                <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.MouseOver.GreenBackground}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.MouseOver.GreenBorder}"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="true">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Pressed.GreenBackground}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Pressed.GreenBorder}"/>
+                            </Trigger>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Pressed.GreenBackground}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Pressed.GreenBorder}"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Opacity" TargetName="border" Value="0.7"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style TargetType="{x:Type ToggleButton}" x:Key="YellowToggleButton">
+            <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
+            <Setter Property="Background" Value="{StaticResource Button.Static.Background}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource Button.Static.Border}"/>
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="1"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ToggleButton}">
+                        <Border x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="true">
+                            <ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="Button.IsDefaulted" Value="true">
+                                <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.MouseOver.YellowBackground}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.MouseOver.YellowBorder}"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="true">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Pressed.YellowBackground}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Pressed.YellowBorder}"/>
+                            </Trigger>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Pressed.YellowBackground}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Pressed.YellowBorder}"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Opacity" TargetName="border" Value="0.7"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <ControlTemplate x:Key="ButtonBaseControlNoOverState" TargetType="{x:Type ButtonBase}">
+            <Border x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
+                <ContentPresenter x:Name="contentPresenter" ContentTemplate="{TemplateBinding ContentTemplate}" Content="{TemplateBinding Content}" ContentStringFormat="{TemplateBinding ContentStringFormat}" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+            </Border>
+            <ControlTemplate.Triggers>
+                <Trigger Property="Button.IsDefaulted" Value="True">
+                    <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Pressed.RedBackground}"/>
+                    <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Pressed.RedBorder}"/>
+                </Trigger>
+                <Trigger Property="ToggleButton.IsChecked" Value="True">
+                    <Setter Property="Background" TargetName="border" Value="#FFBCDDEE"/>
+                    <Setter Property="BorderBrush" TargetName="border" Value="#FF245A83"/>
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Background" TargetName="border" Value="#FFF4F4F4"/>
+                    <Setter Property="BorderBrush" TargetName="border" Value="#FFADB2B5"/>
+                    <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="#FF838383"/>
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+    </Window.Resources>
+    <Grid x:Name="mainGrid" Focusable="False">
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="*" />
@@ -18,7 +204,7 @@
             <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
         <Grid Grid.Row="0" Grid.RowSpan="3" Grid.Column="2" Width="50" Margin="10,30,10,30">
-            <Slider x:Name="trackBarTransitionPos" Orientation="Vertical" HorizontalAlignment="Center" ValueChanged="Slider_ValueChanged" Maximum="100" FontSize="18"/>
+            <Slider x:Name="trackBarTransitionPos" Orientation="Vertical" HorizontalAlignment="Center" Maximum="100" FontSize="18"/>
         </Grid>
         <Grid Grid.Row="0" Grid.Column="0" Margin="10">
             <Grid.RowDefinitions>
@@ -31,13 +217,55 @@
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Text="Program" FontWeight="Bold" FontSize="24" />
-            <Button x:Name="progBut1" Grid.Row="1" Grid.Column="0" Tag="2" Content="Camera 1" Click="progBut_Click" FontWeight="Bold" FontSize="24"/>
-            <Button x:Name="progBut2" Grid.Row="1" Grid.Column="1" Tag="3" Content="Camera 2" Click="progBut_Click" FontWeight="Bold" FontSize="24"/>
-            <Button x:Name="progBut3" Grid.Row="1" Grid.Column="2" Tag="4" Content="Slides" Click="progBut_Click" FontWeight="Bold" FontSize="24"/>
-            <Button x:Name="progBut4" Grid.Row="2" Grid.Column="0" Tag="5" Content="Camera 3" Click="progBut_Click" FontWeight="Bold" FontSize="24"/>
-            <Button x:Name="progBut5" Grid.Row="2" Grid.Column="1" Tag="6" Content="Camera 4" Click="progBut_Click" FontWeight="Bold" FontSize="24"/>
-            <Button x:Name="progBut6" Grid.Row="2" Grid.Column="2" Tag="3010" Content="Announcements" Click="progBut_Click" FontWeight="Bold" FontSize="24"/>
+            <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Text="Program" FontWeight="Bold" FontSize="18" Foreground="White" />
+            <RadioButton Style="{StaticResource RedToggleButton}" GroupName="ProgGroup" x:Name="progBut1" Grid.Row="1" Grid.Column="0" Tag="2" Click="progBut_Click" FontWeight="Bold" FontSize="18" Foreground="#FFCCCCCC">
+                <RadioButton.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="#FF565656" Offset="0"/>
+                        <GradientStop Color="#FF323232" Offset="1"/>
+                    </LinearGradientBrush>
+                </RadioButton.Background> Camera 1
+            </RadioButton>
+            <RadioButton Style="{StaticResource RedToggleButton}" x:Name="progBut2" GroupName="ProgGroup" Grid.Row="1" Grid.Column="1" Tag="3" Click="progBut_Click" FontWeight="Bold" FontSize="18" Foreground="#FFCCCCCC">
+                <RadioButton.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="#FF565656" Offset="0"/>
+                        <GradientStop Color="#FF323232" Offset="1"/>
+                    </LinearGradientBrush>
+                </RadioButton.Background> Camera 2
+            </RadioButton>
+            <RadioButton Style="{StaticResource RedToggleButton}" x:Name="progBut3" GroupName="ProgGroup" Grid.Row="1" Grid.Column="2" Tag="4" Click="progBut_Click" FontWeight="Bold" FontSize="18" Foreground="#FFCCCCCC">
+                <RadioButton.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="#FF565656" Offset="0"/>
+                        <GradientStop Color="#FF323232" Offset="1"/>
+                    </LinearGradientBrush>
+                </RadioButton.Background> Slides
+            </RadioButton>
+            <RadioButton Style="{StaticResource RedToggleButton}" x:Name="progBut4" GroupName="ProgGroup" Grid.Row="2" Grid.Column="0" Tag="5" Click="progBut_Click" FontWeight="Bold" FontSize="18" Foreground="#FFCCCCCC">
+                <RadioButton.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="#FF565656" Offset="0"/>
+                        <GradientStop Color="#FF323232" Offset="1"/>
+                    </LinearGradientBrush>
+                </RadioButton.Background> Camera 3
+            </RadioButton>
+            <RadioButton Style="{StaticResource RedToggleButton}" x:Name="progBut5" GroupName="ProgGroup" Grid.Row="2" Grid.Column="1" Tag="6" Click="progBut_Click" FontWeight="Bold" FontSize="18" Foreground="#FFCCCCCC">
+                <RadioButton.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="#FF565656" Offset="0"/>
+                        <GradientStop Color="#FF323232" Offset="1"/>
+                    </LinearGradientBrush>
+                </RadioButton.Background> Camera 4
+            </RadioButton>
+            <RadioButton Style="{StaticResource RedToggleButton}" x:Name="progBut6" GroupName="ProgGroup" Grid.Row="2" Grid.Column="2" Tag="3010" Click="progBut_Click" FontWeight="Bold" FontSize="18" Foreground="#FFCCCCCC">
+                <RadioButton.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="#FF565656" Offset="0"/>
+                        <GradientStop Color="#FF323232" Offset="1"/>
+                    </LinearGradientBrush>
+                </RadioButton.Background> Announcements
+            </RadioButton>
         </Grid>
         <Grid Grid.Row="1" Grid.Column="0" Margin="10">
             <Grid.RowDefinitions>
@@ -50,13 +278,55 @@
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Text="Slide Insert" FontSize="24" FontWeight="Bold" />
-            <Button x:Name="keyFullBut" Grid.Row="1" Grid.Column="0" Content="Full" FontSize="24" FontWeight="Bold" Click="keyFullBut_Click"/>
-            <Button x:Name="keyWordsBut" Grid.Row="1" Grid.Column="1" Content="Words" FontSize="24" FontWeight="Bold" Click="keyWordsBut_Click"/>
-            <Button x:Name="keyGreenScreenBut" Grid.Row="1" Grid.Column="2" Content="Green Screen" FontSize="24" FontWeight="Bold" Click="keyGreenScreenBut_Click"/>
-            <Button x:Name="keyLeftBut" Grid.Row="2" Grid.Column="0" Content="Left" FontSize="24" FontWeight="Bold" Click="keyLeftBut_Click"/>
-            <Button x:Name="keyClearBut" Grid.Row="2" Grid.Column="1" Content="Clear" FontSize="24" FontWeight="Bold" Click="keyClearBut_Click"/>
-            <Button x:Name="keyRightBut" Grid.Row="2" Grid.Column="2" Content="Right" FontSize="24" FontWeight="Bold" Click="keyRightBut_Click"/>
+            <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Text="Slide Insert" FontSize="18" FontWeight="Bold" Foreground="White" />
+            <RadioButton Style="{StaticResource RedToggleButton}" GroupName="KeyGroup" x:Name="keyFullBut" Grid.Row="1" Grid.Column="0" Click="keyFullBut_Click" FontWeight="Bold" FontSize="18" Foreground="#FFCCCCCC">
+                <RadioButton.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="#FF565656" Offset="0"/>
+                        <GradientStop Color="#FF323232" Offset="1"/>
+                    </LinearGradientBrush>
+                </RadioButton.Background> Full
+            </RadioButton>
+            <RadioButton Style="{StaticResource RedToggleButton}" GroupName="KeyGroup" x:Name="keyWordsBut" Grid.Row="1" Grid.Column="1" Click="keyWordsBut_Click" FontWeight="Bold" FontSize="18" Foreground="#FFCCCCCC">
+                <RadioButton.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="#FF565656" Offset="0"/>
+                        <GradientStop Color="#FF323232" Offset="1"/>
+                    </LinearGradientBrush>
+                </RadioButton.Background> Words
+            </RadioButton>
+            <RadioButton Style="{StaticResource RedToggleButton}" GroupName="KeyGroup" x:Name="keyGreenScreenBut" Grid.Row="1" Grid.Column="2" Click="keyGreenScreenBut_Click" FontWeight="Bold" FontSize="18" Foreground="#FFCCCCCC">
+                <RadioButton.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="#FF565656" Offset="0"/>
+                        <GradientStop Color="#FF323232" Offset="1"/>
+                    </LinearGradientBrush>
+                </RadioButton.Background> Green Screen
+            </RadioButton>
+            <RadioButton Style="{StaticResource RedToggleButton}" GroupName="KeyGroup" x:Name="keyLeftBut" Grid.Row="2" Grid.Column="0" Click="keyLeftBut_Click" FontWeight="Bold" FontSize="18" Foreground="#FFCCCCCC">
+                <RadioButton.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="#FF565656" Offset="0"/>
+                        <GradientStop Color="#FF323232" Offset="1"/>
+                    </LinearGradientBrush>
+                </RadioButton.Background> Left
+            </RadioButton>
+            <Button x:Name="keyClearBut" Grid.Row="2" Grid.Column="1" Content="Clear" FontSize="18" FontWeight="Bold" Click="keyClearBut_Click" Template="{DynamicResource ButtonBaseControlNoOverState}" Foreground="#FFCCCCCC">
+                <Button.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="#FF565656" Offset="0"/>
+                        <GradientStop Color="#FF323232" Offset="1"/>
+                    </LinearGradientBrush>
+                </Button.Background>
+            </Button>
+            <RadioButton Style="{StaticResource RedToggleButton}" GroupName="KeyGroup" x:Name="keyRightBut" Grid.Row="2" Grid.Column="2" Click="keyRightBut_Click" FontWeight="Bold" FontSize="18" Foreground="#FFCCCCCC">
+                <RadioButton.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="#FF565656" Offset="0"/>
+                        <GradientStop Color="#FF323232" Offset="1"/>
+                    </LinearGradientBrush>
+                </RadioButton.Background> Right
+            </RadioButton>
         </Grid>
         <Grid Grid.Row="2" Grid.Column="0" Margin="10">
             <Grid.RowDefinitions>
@@ -70,13 +340,55 @@
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Text="Preview" FontSize="24" FontWeight="Bold" />
-            <Button x:Name="prevBut1" Grid.Row="1" Grid.Column="0" Tag="2" Content="Camera 1" Click="prevBut_Click" FontSize="24" FontWeight="Bold"/>
-            <Button x:Name="prevBut2" Grid.Row="1" Grid.Column="1" Tag="3" Content="Camera 2" Click="prevBut_Click" FontSize="24" FontWeight="Bold"/>
-            <Button x:Name="prevBut3" Grid.Row="1" Grid.Column="2" Tag="4" Content="Slides" Click="prevBut_Click" FontSize="24" FontWeight="Bold"/>
-            <Button x:Name="prevBut4" Grid.Row="2" Grid.Column="0" Tag="5" Content="Camera 3" Click="prevBut_Click" FontSize="24" FontWeight="Bold"/>
-            <Button x:Name="prevBut5" Grid.Row="2" Grid.Column="1" Tag="6" Content="Camera 4" Click="prevBut_Click" FontSize="24" FontWeight="Bold"/>
-            <Button x:Name="prevBut6" Grid.Row="2" Grid.Column="2" Tag="3010" Content="Announcements" Click="prevBut_Click" FontSize="24" FontWeight="Bold"/>
+            <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Text="Preview" FontSize="18" FontWeight="Bold" Foreground="White" />
+            <RadioButton Style="{StaticResource GreenToggleButton}" GroupName="PrevGroup" x:Name="prevBut1" Grid.Row="1" Grid.Column="0" Tag="2" Click="prevBut_Click" FontWeight="Bold" FontSize="18" Foreground="#FFCCCCCC">
+                <RadioButton.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="#FF565656" Offset="0"/>
+                        <GradientStop Color="#FF323232" Offset="1"/>
+                    </LinearGradientBrush>
+                </RadioButton.Background> Camera 1
+            </RadioButton>
+            <RadioButton Style="{StaticResource GreenToggleButton}" GroupName="PrevGroup" x:Name="prevBut2" Grid.Row="1" Grid.Column="1" Tag="3" Click="prevBut_Click" FontWeight="Bold" FontSize="18" Foreground="#FFCCCCCC">
+                <RadioButton.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="#FF565656" Offset="0"/>
+                        <GradientStop Color="#FF323232" Offset="1"/>
+                    </LinearGradientBrush>
+                </RadioButton.Background> Camera 2
+            </RadioButton>
+            <RadioButton Style="{StaticResource GreenToggleButton}" GroupName="PrevGroup" x:Name="prevBut3" Grid.Row="1" Grid.Column="2" Tag="4" Click="prevBut_Click" FontWeight="Bold" FontSize="18" Foreground="#FFCCCCCC">
+                <RadioButton.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="#FF565656" Offset="0"/>
+                        <GradientStop Color="#FF323232" Offset="1"/>
+                    </LinearGradientBrush>
+                </RadioButton.Background> Slides
+            </RadioButton>
+            <RadioButton Style="{StaticResource GreenToggleButton}" GroupName="PrevGroup" x:Name="prevBut4" Grid.Row="2" Grid.Column="0" Tag="5" Click="prevBut_Click" FontWeight="Bold" FontSize="18" Foreground="#FFCCCCCC">
+                <RadioButton.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="#FF565656" Offset="0"/>
+                        <GradientStop Color="#FF323232" Offset="1"/>
+                    </LinearGradientBrush>
+                </RadioButton.Background> Camera 3
+            </RadioButton>
+            <RadioButton Style="{StaticResource GreenToggleButton}" GroupName="PrevGroup" x:Name="prevBut5" Grid.Row="2" Grid.Column="1" Tag="6" Click="prevBut_Click" FontWeight="Bold" FontSize="18" Foreground="#FFCCCCCC">
+                <RadioButton.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="#FF565656" Offset="0"/>
+                        <GradientStop Color="#FF323232" Offset="1"/>
+                    </LinearGradientBrush>
+                </RadioButton.Background> Camera 4
+            </RadioButton>
+            <RadioButton Style="{StaticResource GreenToggleButton}" GroupName="PrevGroup" x:Name="prevBut6" Grid.Row="2" Grid.Column="2" Tag="3010" Click="prevBut_Click" FontWeight="Bold" FontSize="18" Foreground="#FFCCCCCC">
+                <RadioButton.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="#FF565656" Offset="0"/>
+                        <GradientStop Color="#FF323232" Offset="1"/>
+                    </LinearGradientBrush>
+                </RadioButton.Background> Announcements
+            </RadioButton>
         </Grid>
         <Grid Grid.Row="0" Grid.Column="1" Margin="10">
             <Grid.RowDefinitions>
@@ -84,16 +396,37 @@
                 <RowDefinition Height="*" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Text="Sancuary Screens" FontSize="24" FontWeight="Bold" />
+            <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Text="Sancuary Screens" FontSize="18" FontWeight="Bold" Foreground="White" />
             <Grid Grid.Row="1">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-                <Button x:Name="aux1But1" Grid.Column="0" Tag="1,6" Content="Normal" FontSize="24" FontWeight="Bold" Click="Aux_Click" />
-                <Button x:Name="aux1But2" Grid.Column="1" Tag="1,10010" Content="I-Mag" FontSize="24" FontWeight="Bold" Click="Aux_Click" />
-                <Button x:Name="aux1But3" Grid.Column="2" Tag="1,3010" Content="Pre/Post" FontSize="24" FontWeight="Bold" Click="Aux_Click" />
+                <RadioButton Style="{StaticResource YellowToggleButton}" GroupName="aux1Group" x:Name="aux1But1" Grid.Column="0" Tag="1,6" Click="Aux_Click" FontWeight="Bold" FontSize="18" Foreground="#FFCCCCCC">
+                    <RadioButton.Background>
+                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                            <GradientStop Color="#FF565656" Offset="0"/>
+                            <GradientStop Color="#FF323232" Offset="1"/>
+                        </LinearGradientBrush>
+                    </RadioButton.Background> Normal
+                </RadioButton>
+                <RadioButton Style="{StaticResource YellowToggleButton}" GroupName="aux1Group" x:Name="aux1But2" Grid.Column="1" Tag="1,10010" Click="Aux_Click" FontWeight="Bold" FontSize="18" Foreground="#FFCCCCCC">
+                    <RadioButton.Background>
+                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                            <GradientStop Color="#FF565656" Offset="0"/>
+                            <GradientStop Color="#FF323232" Offset="1"/>
+                        </LinearGradientBrush>
+                    </RadioButton.Background> I-Mag
+                </RadioButton>
+                <RadioButton Style="{StaticResource YellowToggleButton}" GroupName="aux1Group" x:Name="aux1But3" Grid.Column="2" Tag="1,3010" Click="Aux_Click" FontWeight="Bold" FontSize="18" Foreground="#FFCCCCCC">
+                    <RadioButton.Background>
+                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                            <GradientStop Color="#FF565656" Offset="0"/>
+                            <GradientStop Color="#FF323232" Offset="1"/>
+                        </LinearGradientBrush>
+                    </RadioButton.Background> Pre/Post
+                </RadioButton>
             </Grid>
             <Grid Grid.Row="2">
                 <Grid.RowDefinitions>
@@ -105,12 +438,54 @@
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-                <Button x:Name="aux1But4" Grid.Row="0" Grid.Column="0" Tag="1,2" Content="Camera 1" FontSize="24" FontWeight="Bold" Click="Aux_Click"/>
-                <Button x:Name="aux1But5" Grid.Row="0" Grid.Column="1" Tag="1,3" Content="Camera 2" FontSize="24" FontWeight="Bold" Click="Aux_Click"/>
-                <Button x:Name="aux1But6" Grid.Row="0" Grid.Column="2" Tag="1,6" Content="Slides" FontSize="24" FontWeight="Bold" Click="Aux_Click"/>
-                <Button x:Name="aux1But7" Grid.Row="1" Grid.Column="0" Tag="1,4" Content="Camera 3" FontSize="24" FontWeight="Bold" Click="Aux_Click"/>
-                <Button x:Name="aux1But8" Grid.Row="2" Grid.Column="1" Tag="1,5" Content="Camera 4" FontSize="24" FontWeight="Bold" Click="Aux_Click"/>
-                <Button x:Name="aux1But9" Grid.Row="3" Grid.Column="2" Tag="1,3010" Content="Announcements" FontSize="24" FontWeight="Bold" Click="Aux_Click"/>
+                <RadioButton Style="{StaticResource YellowToggleButton}" GroupName="aux1Group" x:Name="aux1But4" Grid.Row="0" Grid.Column="0" Tag="1,2" Click="Aux_Click" FontWeight="Bold" FontSize="18" Foreground="#FFCCCCCC">
+                    <RadioButton.Background>
+                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                            <GradientStop Color="#FF565656" Offset="0"/>
+                            <GradientStop Color="#FF323232" Offset="1"/>
+                        </LinearGradientBrush>
+                    </RadioButton.Background> Camera 1
+                </RadioButton>
+                <RadioButton Style="{StaticResource YellowToggleButton}" GroupName="aux1Group" x:Name="aux1But5" Grid.Row="0" Grid.Column="1" Tag="1,3" Click="Aux_Click" FontWeight="Bold" FontSize="18" Foreground="#FFCCCCCC">
+                    <RadioButton.Background>
+                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                            <GradientStop Color="#FF565656" Offset="0"/>
+                            <GradientStop Color="#FF323232" Offset="1"/>
+                        </LinearGradientBrush>
+                    </RadioButton.Background> Camera 2
+                </RadioButton>
+                <RadioButton Style="{StaticResource YellowToggleButton}" GroupName="aux1Group" x:Name="aux1But6" Grid.Row="0" Grid.Column="2" Tag="1,6" Click="Aux_Click" FontWeight="Bold" FontSize="18" Foreground="#FFCCCCCC" HorizontalAlignment="Right" Margin="0,0,0.5,0" Width="300">
+                    <RadioButton.Background>
+                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                            <GradientStop Color="#FF565656" Offset="0"/>
+                            <GradientStop Color="#FF323232" Offset="1"/>
+                        </LinearGradientBrush>
+                    </RadioButton.Background> Slides
+                </RadioButton>
+                <RadioButton Style="{StaticResource YellowToggleButton}" GroupName="aux1Group" x:Name="aux1But7" Grid.Row="1" Grid.Column="0" Tag="1,4" Click="Aux_Click" FontWeight="Bold" FontSize="18" Foreground="#FFCCCCCC">
+                    <RadioButton.Background>
+                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                            <GradientStop Color="#FF565656" Offset="0"/>
+                            <GradientStop Color="#FF323232" Offset="1"/>
+                        </LinearGradientBrush>
+                    </RadioButton.Background> Camera 3
+                </RadioButton>
+                <RadioButton Style="{StaticResource YellowToggleButton}" GroupName="aux1Group" x:Name="aux1But8" Grid.Row="2" Grid.Column="1" Tag="1,5" Click="Aux_Click" FontWeight="Bold" FontSize="18" Foreground="#FFCCCCCC">
+                    <RadioButton.Background>
+                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                            <GradientStop Color="#FF565656" Offset="0"/>
+                            <GradientStop Color="#FF323232" Offset="1"/>
+                        </LinearGradientBrush>
+                    </RadioButton.Background> Camera 4
+                </RadioButton>
+                <RadioButton Style="{StaticResource YellowToggleButton}" GroupName="aux1Group" x:Name="aux1But9" Grid.Row="3" Grid.Column="2" Tag="1,3010" Click="Aux_Click" FontWeight="Bold" FontSize="18" Foreground="#FFCCCCCC">
+                    <RadioButton.Background>
+                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                            <GradientStop Color="#FF565656" Offset="0"/>
+                            <GradientStop Color="#FF323232" Offset="1"/>
+                        </LinearGradientBrush>
+                    </RadioButton.Background> Announcements
+                </RadioButton>
             </Grid>
         </Grid>
         <Grid Grid.Row="1" Grid.Column="1" Margin="10">
@@ -120,14 +495,28 @@
                 <RowDefinition Height="*" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Text="Broadcast" FontSize="24" FontWeight="Bold" />
+            <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Text="Broadcast" FontSize="18" FontWeight="Bold" Foreground="White" />
             <Grid Grid.Row="1">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-                <Button Grid.Column="0" Tag="3,10010" Content="Normal" FontSize="24" FontWeight="Bold" Click="Aux_Click"/>
-                <Button Grid.Column="1" Tag="3,3010" Content="Bypass" FontSize="24" FontWeight="Bold" Click="Aux_Click"/>
+                <RadioButton Style="{StaticResource YellowToggleButton}" GroupName="aux2Group" x:Name="aux2But1" Grid.Column="0" Tag="3,10010" Click="Aux_Click" FontWeight="Bold" FontSize="18" Foreground="#FFCCCCCC">
+                    <RadioButton.Background>
+                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                            <GradientStop Color="#FF565656" Offset="0"/>
+                            <GradientStop Color="#FF323232" Offset="1"/>
+                        </LinearGradientBrush>
+                    </RadioButton.Background> Normal
+                </RadioButton>
+                <RadioButton Style="{StaticResource YellowToggleButton}" GroupName="aux2Group" x:Name="aux2But2" Grid.Column="1" Tag="3,3010" Click="Aux_Click" FontWeight="Bold" FontSize="18" Foreground="#FFCCCCCC">
+                    <RadioButton.Background>
+                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                            <GradientStop Color="#FF565656" Offset="0"/>
+                            <GradientStop Color="#FF323232" Offset="1"/>
+                        </LinearGradientBrush>
+                    </RadioButton.Background> Bypass
+                </RadioButton>
             </Grid>
             <Grid Grid.Row="2">
                 <Grid.RowDefinitions>
@@ -139,12 +528,54 @@
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-                <Button Grid.Row="0" Grid.Column="0" Tag="3,2" Content="Camera 1" FontSize="24" FontWeight="Bold" Click="Aux_Click"/>
-                <Button Grid.Row="0" Grid.Column="1" Tag="3,3" Content="Camera 2" FontSize="24" FontWeight="Bold" Click="Aux_Click"/>
-                <Button Grid.Row="0" Grid.Column="2" Tag="3,6" Content="Slides" FontSize="24" FontWeight="Bold" Click="Aux_Click"/>
-                <Button Grid.Row="1" Grid.Column="0" Tag="3,4" Content="Camera 3" FontSize="24" FontWeight="Bold" Click="Aux_Click"/>
-                <Button Grid.Row="2" Grid.Column="1" Tag="3,5" Content="Camera 4" FontSize="24" FontWeight="Bold" Click="Aux_Click"/>
-                <Button Grid.Row="3" Grid.Column="2" Tag="3,3010" Content="Announcements" FontSize="24" FontWeight="Bold" Click="Aux_Click"/>
+                <RadioButton Style="{StaticResource YellowToggleButton}" GroupName="aux2Group" x:Name="aux2But3" Grid.Row="0" Grid.Column="0" Tag="3,2" Click="Aux_Click" FontWeight="Bold" FontSize="18" Foreground="#FFCCCCCC">
+                    <RadioButton.Background>
+                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                            <GradientStop Color="#FF565656" Offset="0"/>
+                            <GradientStop Color="#FF323232" Offset="1"/>
+                        </LinearGradientBrush>
+                    </RadioButton.Background> Camera 1
+                </RadioButton>
+                <RadioButton Style="{StaticResource YellowToggleButton}" GroupName="aux2Group" x:Name="aux2But4" Grid.Row="0" Grid.Column="1" Tag="3,3" Click="Aux_Click" FontWeight="Bold" FontSize="18" Foreground="#FFCCCCCC">
+                    <RadioButton.Background>
+                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                            <GradientStop Color="#FF565656" Offset="0"/>
+                            <GradientStop Color="#FF323232" Offset="1"/>
+                        </LinearGradientBrush>
+                    </RadioButton.Background> Camera 2
+                </RadioButton>
+                <RadioButton Style="{StaticResource YellowToggleButton}" GroupName="aux2Group" x:Name="aux2But5" Grid.Row="0" Grid.Column="2" Tag="3,6" Click="Aux_Click" FontWeight="Bold" FontSize="18" Foreground="#FFCCCCCC">
+                    <RadioButton.Background>
+                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                            <GradientStop Color="#FF565656" Offset="0"/>
+                            <GradientStop Color="#FF323232" Offset="1"/>
+                        </LinearGradientBrush>
+                    </RadioButton.Background> Slides
+                </RadioButton>
+                <RadioButton Style="{StaticResource YellowToggleButton}" GroupName="aux2Group" x:Name="aux2But6" Grid.Row="1" Grid.Column="0" Tag="3,4" Click="Aux_Click" FontWeight="Bold" FontSize="18" Foreground="#FFCCCCCC">
+                    <RadioButton.Background>
+                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                            <GradientStop Color="#FF565656" Offset="0"/>
+                            <GradientStop Color="#FF323232" Offset="1"/>
+                        </LinearGradientBrush>
+                    </RadioButton.Background> Camera 3
+                </RadioButton>
+                <RadioButton Style="{StaticResource YellowToggleButton}" GroupName="aux2Group" x:Name="aux2But7" Grid.Row="1" Grid.Column="1" Tag="3,5" Click="Aux_Click" FontWeight="Bold" FontSize="18" Foreground="#FFCCCCCC">
+                    <RadioButton.Background>
+                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                            <GradientStop Color="#FF565656" Offset="0"/>
+                            <GradientStop Color="#FF323232" Offset="1"/>
+                        </LinearGradientBrush>
+                    </RadioButton.Background> Camera 4
+                </RadioButton>
+                <RadioButton Style="{StaticResource YellowToggleButton}" GroupName="aux2Group" x:Name="aux2But8" Grid.Row="3" Grid.Column="2" Tag="3,3010" Click="Aux_Click" FontWeight="Bold" FontSize="18" Foreground="#FFCCCCCC">
+                    <RadioButton.Background>
+                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                            <GradientStop Color="#FF565656" Offset="0"/>
+                            <GradientStop Color="#FF323232" Offset="1"/>
+                        </LinearGradientBrush>
+                    </RadioButton.Background> Announcements
+                </RadioButton>
             </Grid>
         </Grid>
         <Grid Grid.Row="2" Grid.Column="1" Margin="10,80,10,10">
@@ -154,9 +585,30 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <Button x:Name="autoBut" Grid.Row="0" Grid.Column="0" Content="Auto" FontSize="24" FontWeight="Bold" Click="autoBut_Click"/>
-            <Button x:Name="cutBut" Grid.Row="0" Grid.Column="1" Content="Cut" FontSize="24" FontWeight="Bold" Click="cutBut_Click" />
-            <Button x:Name="fadeBlackBut" Grid.Row="0" Grid.Column="3" Content="Fade To Black" FontSize="24" FontWeight="Bold" Click="fadeBlackBut_Click" />
+            <Button x:Name="autoBut" Grid.Row="0" Grid.Column="0" Content="Auto" FontSize="18" FontWeight="Bold" Click="autoBut_Click" Template="{DynamicResource ButtonBaseControlNoOverState}" Foreground="#FFCCCCCC">
+                <Button.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="#FF565656" Offset="0"/>
+                        <GradientStop Color="#FF323232" Offset="1"/>
+                    </LinearGradientBrush>
+                </Button.Background>
+            </Button>
+            <Button x:Name="cutBut" Grid.Row="0" Grid.Column="1" Content="Cut" FontSize="18" FontWeight="Bold" Click="cutBut_Click" Focusable="False" Template="{DynamicResource ButtonBaseControlNoOverState}" Foreground="#FFCCCCCC">
+                <Button.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="#FF565656" Offset="0"/>
+                        <GradientStop Color="#FF323232" Offset="1"/>
+                    </LinearGradientBrush>
+                </Button.Background>
+            </Button>
+            <Button x:Name="fadeBlackBut" Grid.Row="0" Grid.Column="3" Content="Fade To Black" FontSize="18" FontWeight="Bold" Click="fadeBlackBut_Click" Focusable="False" Template="{DynamicResource ButtonBaseControlNoOverState}" Foreground="#FFCCCCCC">
+                <Button.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="#FF565656" Offset="0"/>
+                        <GradientStop Color="#FF323232" Offset="1"/>
+                    </LinearGradientBrush>
+                </Button.Background>
+            </Button>
         </Grid>
     </Grid>
 </Window>

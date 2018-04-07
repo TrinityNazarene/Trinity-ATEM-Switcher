@@ -14,7 +14,6 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using BMDSwitcherAPI;
 using System.Runtime.InteropServices;
-using System.Timers;
 
 namespace Trinity_ATEM_Switcher
 {
@@ -31,12 +30,11 @@ namespace Trinity_ATEM_Switcher
         private MixEffectBlockMonitor m_mixEffectBlockMonitor;
         private IBMDSwitcherTransitionParameters m_transition;
         private bool m_moveSliderDownwards = false;
-        private bool m_currentTransitionReachedHalfway = false;
         private _BMDSwitcherTransitionStyle existing_style;
         private List<InputMonitor> m_inputMonitors = new List<InputMonitor>();
         private long currentPreview;
+        private long currentProgram;
         private long currentKey;
-        private static Timer transTimer;
         public MainWindow()
         {
             InitializeComponent();
@@ -170,6 +168,11 @@ namespace Trinity_ATEM_Switcher
             //setCurrent preview ID
             m_mixEffectBlock1.GetInt(_BMDSwitcherMixEffectBlockPropertyId.bmdSwitcherMixEffectBlockPropertyIdPreviewInput, out currentPreview);
             currentKey = -1;
+            //setCurrent Program ID
+            m_mixEffectBlock1.GetInt(_BMDSwitcherMixEffectBlockPropertyId.bmdSwitcherMixEffectBlockPropertyIdProgramInput, out currentProgram);
+            updateProgPrevUI(currentPreview, false);
+            updateProgPrevUI(currentProgram, true);
+            UpdateAuxSourceCombos();
         }
 
         private void getInputNames()
@@ -252,10 +255,76 @@ namespace Trinity_ATEM_Switcher
             }
         }
 
+        private void updateProgPrevUI(long inputID,Boolean progBut)
+        {
+            Console.WriteLine("inputID" + inputID);
+            switch (inputID)
+            {
+                case 2:
+                    if (progBut == true)
+                    {
+                        progBut1.IsChecked = true;
+                    } else {
+                        prevBut1.IsChecked = true;
+                    }
+                    
+                    break;
+                case 3:
+                    if (progBut == true)
+                    {
+                        progBut2.IsChecked = true;
+                    }
+                    else
+                    {
+                        prevBut2.IsChecked = true;
+                    }
+                    break;
+                case 4:
+                    if (progBut == true)
+                    {
+                        progBut3.IsChecked = true;
+                    }
+                    else
+                    {
+                        prevBut3.IsChecked = true;
+                    }
+                    break;
+                case 5:
+                    if (progBut == true)
+                    {
+                        progBut4.IsChecked = true;
+                    }
+                    else
+                    {
+                        prevBut4.IsChecked = true;
+                    }
+                    break;
+                case 6:
+                    if (progBut == true)
+                    {
+                        progBut5.IsChecked = true;
+                    }
+                    else
+                    {
+                        prevBut5.IsChecked = true;
+                    }
+                    break;
+                case 3010:
+                    if (progBut == true)
+                    {
+                        progBut6.IsChecked = true;
+                    }
+                    else
+                    {
+                        prevBut6.IsChecked = true;
+                    }
+                    break;
+            }
+        }
         private void ChangeAUX(int AuxNumber, long inputId )
         {
            
-            Console.WriteLine("AuxNumber=" + AuxNumber + " inputId=" + inputId);
+            //Console.WriteLine("AuxNumber=" + AuxNumber + " inputId=" + inputId);
             IBMDSwitcherInputIterator inputIterator = null;
             IntPtr inputIteratorPtr;
             Guid inputIteratorIID = typeof(IBMDSwitcherInputIterator).GUID;
@@ -291,9 +360,116 @@ namespace Trinity_ATEM_Switcher
 
         }
 
+        private void UpdateAuxSourceCombos()
+        {
+            long lvSource = 0;
+            IBMDSwitcherInputIterator inputIterator = null;
+            IntPtr inputIteratorPtr;
+            Guid inputIteratorIID = typeof(IBMDSwitcherInputIterator).GUID;
+            this.m_switcher.CreateIterator(ref inputIteratorIID, out inputIteratorPtr);
+            if (inputIteratorPtr != null)
+            {
+                inputIterator = (IBMDSwitcherInputIterator)Marshal.GetObjectForIUnknown(inputIteratorPtr);
+            }
+
+            if (inputIterator != null)
+            {
+                IBMDSwitcherInput input;
+                inputIterator.Next(out input);
+                int AUXCount = 0;
+  
+                while (input != null)
+                {
+                    BMDSwitcherAPI._BMDSwitcherPortType inputPortType;
+                    input.GetPortType(out inputPortType);
+                    if (inputPortType == BMDSwitcherAPI._BMDSwitcherPortType.bmdSwitcherPortTypeAuxOutput)
+                        
+                    {
+                       
+                        IBMDSwitcherInputAux WkAux = (IBMDSwitcherInputAux)input;
+                        WkAux.GetInputSource(out lvSource);
+                        AUXCount++;
+                        if (AUXCount == 1)
+                        {
+                            switch (lvSource)
+                            {
+                                case 6:
+                                    aux1But1.IsChecked = true;
+                                    break;
+                                case 10010:
+                                    aux1But2.IsChecked = true;
+                                    break;
+                                case 3010:
+                                    aux1But3.IsChecked = true;
+                                    break;
+                                case 2:
+                                    aux1But4.IsChecked = true;
+                                    break;
+                                case 3:
+                                    aux1But5.IsChecked = true;
+                                    break;
+                                case 4:
+                                    aux1But7.IsChecked = true;
+                                    break;
+                                case 5:
+                                    aux1But8.IsChecked = true;
+                                    break;
+
+                            }
+                            //ComboBox WkCombo = (ComboBox)this.Controls.Find("comboBoxAUX" + AUXCount, true)[0];
+                            //foreach (StringObjectPair<long> item in WkCombo.Items)
+                            //{
+                            //    if (item.value == lvSource)
+                            //    {
+                            //WkCombo.SelectedIndex = WkCombo.Items.IndexOf(item);
+                            //        break;
+                            //    }
+                            //}
+                        }
+                        if (AUXCount == 3)
+                            {
+                                
+                                switch (lvSource)
+                                {
+                                   
+                                    case 10010:
+                                        aux2But1.IsChecked = true;
+                                        break;
+                                    case 3010:
+                                        aux2But2.IsChecked = true;
+                                        break;
+                                    case 2:
+                                        aux2But3.IsChecked = true;
+                                        break;
+                                    case 3:
+                                        aux2But4.IsChecked = true;
+                                        break;
+                                    case 4:
+                                        aux2But6.IsChecked = true;
+                                        break;
+                                    case 5:
+                                        aux2But7.IsChecked = true;
+                                        break;
+                                    case 6:
+                                        aux2But5.IsChecked = true;
+                                        break;
+
+                                }
+                                
+                            
+                            
+                            }
+                        
+
+                    }
+                    inputIterator.Next(out input);
+                }
+            }
+        }
+
         private void progBut_Click(object sender, RoutedEventArgs e)
         {
-            var button = sender as Button;
+            var button = sender as RadioButton;
             var butVal = button.Tag;
             int butNum = Convert.ToInt32(butVal);
             if (m_mixEffectBlock1 != null)
@@ -305,7 +481,7 @@ namespace Trinity_ATEM_Switcher
 
         private void prevBut_Click(object sender, RoutedEventArgs e)
         {
-            var button = sender as Button;
+            var button = sender as RadioButton;
             var butVal = button.Tag;
             int butNum = Convert.ToInt32(butVal);
             if (m_mixEffectBlock1 != null)
@@ -318,7 +494,7 @@ namespace Trinity_ATEM_Switcher
 
         private void Aux_Click(object sender, RoutedEventArgs e)
         {
-            var button = sender as Button;
+            var button = sender as RadioButton;
             string butVals = button.Tag as string;
             string[] namesArray = butVals.Split(',');
             int auxNum = Convert.ToInt32(namesArray[0]);
@@ -363,11 +539,6 @@ namespace Trinity_ATEM_Switcher
             }
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            
-        }
-
         private void keyWordsBut_Click(object sender, RoutedEventArgs e)
         {
             m_transition = (BMDSwitcherAPI.IBMDSwitcherTransitionParameters)m_mixEffectBlock1;
@@ -398,8 +569,9 @@ namespace Trinity_ATEM_Switcher
         
         private void keyClearBut_Click(object sender, RoutedEventArgs e)
         {
-            if (currentKey!= -1) { 
-            m_transition = (BMDSwitcherAPI.IBMDSwitcherTransitionParameters)m_mixEffectBlock1;
+            if (currentKey!= -1) {
+                keyFullBut.IsChecked = false;
+                m_transition = (BMDSwitcherAPI.IBMDSwitcherTransitionParameters)m_mixEffectBlock1;
             _BMDSwitcherTransitionSelection transitionselection;
             m_transition.GetNextTransitionSelection(out transitionselection);
             string stringtransitionselection = transitionselection.ToString();
@@ -408,18 +580,21 @@ namespace Trinity_ATEM_Switcher
             {
                 case 1:
                     m_transition.SetNextTransitionSelection(_BMDSwitcherTransitionSelection.bmdSwitcherTransitionSelectionBackground + 1);
-                    
-                    break;
+                    keyWordsBut.IsChecked = false;
+
+                        break;
                 case 2:
                     m_transition.SetNextTransitionSelection(_BMDSwitcherTransitionSelection.bmdSwitcherTransitionSelectionKey2);
-                    
-                    break;
+                    keyLeftBut.IsChecked = false;
+                        break;
                 case 3:
                     m_transition.SetNextTransitionSelection(_BMDSwitcherTransitionSelection.bmdSwitcherTransitionSelectionKey3);
-                    break;
+                    keyRightBut.IsChecked = false;
+                        break;
                 case 4:
                     m_transition.SetNextTransitionSelection(_BMDSwitcherTransitionSelection.bmdSwitcherTransitionSelectionKey4);
-                    break;
+                    keyGreenScreenBut.IsChecked = false;
+                        break;
             }
             if (m_mixEffectBlock1 != null)
             {
@@ -498,6 +673,7 @@ namespace Trinity_ATEM_Switcher
             {
                 m_mixEffectBlock1.SetInt(_BMDSwitcherMixEffectBlockPropertyId.bmdSwitcherMixEffectBlockPropertyIdProgramInput,
                    6);
+                keyFullBut.IsChecked = true;
             }
 
         }
