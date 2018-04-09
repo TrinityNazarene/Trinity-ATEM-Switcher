@@ -23,8 +23,7 @@ namespace Trinity_ATEM_Switcher
     /// </summary>
     public partial class MainWindow : Window
     {
-        private IBMDSwitcherDiscovery m_switcherDiscovery;
-        private IBMDSwitcher m_switcher;
+        private ATEMSystem ATEM = new ATEMSystem();
         private IBMDSwitcherMixEffectBlock m_mixEffectBlock1;
         private SwitcherMonitor m_switcherMonitor;
         private MixEffectBlockMonitor m_mixEffectBlockMonitor;
@@ -40,49 +39,18 @@ namespace Trinity_ATEM_Switcher
             InitializeComponent();
 
             m_switcherMonitor = new SwitcherMonitor();
-            
-
             m_mixEffectBlockMonitor = new MixEffectBlockMonitor();
-            
-
-            m_switcherDiscovery = new CBMDSwitcherDiscovery();
-            if (m_switcherDiscovery == null)
-            {
-                MessageBox.Show("Could not create Switcher Discovery Instance.\nATEM Switcher Software may not be installed.", "Error");
-                Environment.Exit(1);
-            }
-
-            SwitcherDisconnected();		// start with switcher disconnected
-
-            _BMDSwitcherConnectToFailure failReason = 0;
-            string address = "192.168.111.102";
 
             try
             {
-                // Note that ConnectTo() can take several seconds to return, both for success or failure,
-                // depending upon hostname resolution and network response times, so it may be best to
-                // do this in a separate thread to prevent the main GUI thread blocking.
-                m_switcherDiscovery.ConnectTo(address, out m_switcher, out failReason);
+                SwitcherDisconnected();		// start with switcher disconnected
+                ATEM.ConnectTo("192.168.111.102");
+                SwitcherConnected();
             }
-            catch (COMException)
+            catch (Exception ex)
             {
-                // An exception will be thrown if ConnectTo fails. For more information, see failReason.
-                switch (failReason)
-                {
-                    case _BMDSwitcherConnectToFailure.bmdSwitcherConnectToFailureNoResponse:
-                        MessageBox.Show("No response from Switcher", "Error");
-                        break;
-                    case _BMDSwitcherConnectToFailure.bmdSwitcherConnectToFailureIncompatibleFirmware:
-                        MessageBox.Show("Switcher has incompatible firmware", "Error");
-                        break;
-                    default:
-                        MessageBox.Show("Connection failed for unknown reason", "Error");
-                        break;
-                }
-                return;
+                MessageBox.Show(ex.Message, "Error");
             }
-
-            SwitcherConnected();
         }
 
 
@@ -97,18 +65,18 @@ namespace Trinity_ATEM_Switcher
 
             // Get the switcher name:
             string switcherName;
-            m_switcher.GetProductName(out switcherName);
+            ATEM.Switcher.GetProductName(out switcherName);
             //textBoxSwitcherName.Text = switcherName;
             
             // Install SwitcherMonitor callbacks:
-            m_switcher.AddCallback(m_switcherMonitor);
+            ATEM.Switcher.AddCallback(m_switcherMonitor);
 
             // We create input monitors for each input. To do this we iterate over all inputs:
             // This will allow us to update the combo boxes when input names change:
             IBMDSwitcherInputIterator inputIterator = null;
             IntPtr inputIteratorPtr;
             Guid inputIteratorIID = typeof(IBMDSwitcherInputIterator).GUID;
-            m_switcher.CreateIterator(ref inputIteratorIID, out inputIteratorPtr);
+            ATEM.Switcher.CreateIterator(ref inputIteratorIID, out inputIteratorPtr);
             if (inputIteratorPtr != null)
             {
                 inputIterator = (IBMDSwitcherInputIterator)Marshal.GetObjectForIUnknown(inputIteratorPtr);
@@ -137,7 +105,7 @@ namespace Trinity_ATEM_Switcher
             IBMDSwitcherMixEffectBlockIterator meIterator = null;
             IntPtr meIteratorPtr;
             Guid meIteratorIID = typeof(IBMDSwitcherMixEffectBlockIterator).GUID;
-            m_switcher.CreateIterator(ref meIteratorIID, out meIteratorPtr);
+            ATEM.Switcher.CreateIterator(ref meIteratorIID, out meIteratorPtr);
             if (meIteratorPtr != null)
             {
                 meIterator = (IBMDSwitcherMixEffectBlockIterator)Marshal.GetObjectForIUnknown(meIteratorPtr);
@@ -182,7 +150,7 @@ namespace Trinity_ATEM_Switcher
             IBMDSwitcherInputIterator inputIterator = null;
             IntPtr inputIteratorPtr;
             Guid inputIteratorIID = typeof(IBMDSwitcherInputIterator).GUID;
-            m_switcher.CreateIterator(ref inputIteratorIID, out inputIteratorPtr);
+            ATEM.Switcher.CreateIterator(ref inputIteratorIID, out inputIteratorPtr);
             if (inputIteratorPtr != null)
             {
                 inputIterator = (IBMDSwitcherInputIterator)Marshal.GetObjectForIUnknown(inputIteratorPtr);
@@ -245,13 +213,11 @@ namespace Trinity_ATEM_Switcher
                 m_mixEffectBlock1 = null;
             }
 
-            if (m_switcher != null)
+            if (ATEM.Switcher != null)
             {
                 // Remove callback:
-                m_switcher.RemoveCallback(m_switcherMonitor);
-
-                // release reference:
-                m_switcher = null;
+                ATEM.Switcher.RemoveCallback(m_switcherMonitor);
+                ATEM.Disconnect();
             }
         }
 
@@ -328,7 +294,7 @@ namespace Trinity_ATEM_Switcher
             IBMDSwitcherInputIterator inputIterator = null;
             IntPtr inputIteratorPtr;
             Guid inputIteratorIID = typeof(IBMDSwitcherInputIterator).GUID;
-            this.m_switcher.CreateIterator(ref inputIteratorIID, out inputIteratorPtr);
+            ATEM.Switcher.CreateIterator(ref inputIteratorIID, out inputIteratorPtr);
             if (inputIteratorPtr != null)
             {
                 inputIterator = (IBMDSwitcherInputIterator)Marshal.GetObjectForIUnknown(inputIteratorPtr);
@@ -366,7 +332,7 @@ namespace Trinity_ATEM_Switcher
             IBMDSwitcherInputIterator inputIterator = null;
             IntPtr inputIteratorPtr;
             Guid inputIteratorIID = typeof(IBMDSwitcherInputIterator).GUID;
-            this.m_switcher.CreateIterator(ref inputIteratorIID, out inputIteratorPtr);
+            ATEM.Switcher.CreateIterator(ref inputIteratorIID, out inputIteratorPtr);
             if (inputIteratorPtr != null)
             {
                 inputIterator = (IBMDSwitcherInputIterator)Marshal.GetObjectForIUnknown(inputIteratorPtr);
