@@ -35,6 +35,9 @@ namespace Trinity_ATEM_Switcher
         private long currentPreview;
         private long currentProgram;
         private long currentKey;
+        private RadioButton currentkeyBut;
+        private bool m_currentTransitionReachedHalfway = false;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -165,6 +168,12 @@ namespace Trinity_ATEM_Switcher
             //UpdateTransitionFramesRemaining();
             //UpdateSliderPosition();
 
+            m_mixEffectBlockMonitor.ProgramInputChanged += new SwitcherEventHandler((s, a) => this.Dispatcher.Invoke((Action)(() => UpdateProgramButtonSelection())));
+            m_mixEffectBlockMonitor.PreviewInputChanged += new SwitcherEventHandler((s, a) => this.Dispatcher.Invoke((Action)(() => UpdatePreviewButtonSelection())));
+            m_mixEffectBlockMonitor.TransitionFramesRemainingChanged += new SwitcherEventHandler((s, a) => this.Dispatcher.Invoke((Action)(() => UpdateTransitionFramesRemaining())));
+            m_mixEffectBlockMonitor.TransitionPositionChanged += new SwitcherEventHandler((s, a) => this.Dispatcher.Invoke((Action)(() => UpdateSliderPosition())));
+            m_mixEffectBlockMonitor.InTransitionChanged += new SwitcherEventHandler((s, a) => this.Dispatcher.Invoke((Action)(() => OnInTransitionChanged())));
+
             //setCurrent preview ID
             m_mixEffectBlock1.GetInt(_BMDSwitcherMixEffectBlockPropertyId.bmdSwitcherMixEffectBlockPropertyIdPreviewInput, out currentPreview);
             currentKey = -1;
@@ -174,6 +183,7 @@ namespace Trinity_ATEM_Switcher
             updateProgPrevUI(currentProgram, true);
             UpdateAuxSourceCombos();
         }
+
 
         private void getInputNames()
         {
@@ -257,7 +267,7 @@ namespace Trinity_ATEM_Switcher
 
         private void updateProgPrevUI(long inputID,Boolean progBut)
         {
-            Console.WriteLine("inputID" + inputID);
+
             switch (inputID)
             {
                 case 2:
@@ -507,6 +517,8 @@ namespace Trinity_ATEM_Switcher
             if (m_mixEffectBlock1 != null)
             {
                 m_mixEffectBlock1.PerformAutoTransition();
+                //System.Threading.Thread.Sleep(500);
+                
             }
         }
 
@@ -515,6 +527,12 @@ namespace Trinity_ATEM_Switcher
             if (m_mixEffectBlock1 != null)
             {
                 m_mixEffectBlock1.PerformCut();
+                //System.Threading.Thread.Sleep(500);
+                //m_mixEffectBlock1.GetInt(_BMDSwitcherMixEffectBlockPropertyId.bmdSwitcherMixEffectBlockPropertyIdPreviewInput, out currentPreview);
+                //setCurrent Program ID
+                //m_mixEffectBlock1.GetInt(_BMDSwitcherMixEffectBlockPropertyId.bmdSwitcherMixEffectBlockPropertyIdProgramInput, out currentProgram);
+                //updateProgPrevUI(currentPreview, false);
+                //updateProgPrevUI(currentProgram, true);
             }
         }
 
@@ -523,6 +541,12 @@ namespace Trinity_ATEM_Switcher
             if (m_mixEffectBlock1 != null)
             {
                 m_mixEffectBlock1.PerformFadeToBlack();
+                //System.Threading.Thread.Sleep(500);
+                //m_mixEffectBlock1.GetInt(_BMDSwitcherMixEffectBlockPropertyId.bmdSwitcherMixEffectBlockPropertyIdPreviewInput, out currentPreview);
+                //setCurrent Program ID
+                //m_mixEffectBlock1.GetInt(_BMDSwitcherMixEffectBlockPropertyId.bmdSwitcherMixEffectBlockPropertyIdProgramInput, out currentProgram);
+                //updateProgPrevUI(currentPreview, false);
+                //updateProgPrevUI(currentProgram, true);
             }
         }
 
@@ -541,7 +565,9 @@ namespace Trinity_ATEM_Switcher
 
         private void keyWordsBut_Click(object sender, RoutedEventArgs e)
         {
-            m_transition = (BMDSwitcherAPI.IBMDSwitcherTransitionParameters)m_mixEffectBlock1;
+            if (currentKey == -1)
+            {
+               m_transition = (BMDSwitcherAPI.IBMDSwitcherTransitionParameters)m_mixEffectBlock1;
             _BMDSwitcherTransitionSelection transitionselection;
             m_transition.GetNextTransitionSelection(out transitionselection);
             string stringtransitionselection = transitionselection.ToString();
@@ -562,7 +588,17 @@ namespace Trinity_ATEM_Switcher
             System.Threading.Thread.Sleep(100);
             m_transition.SetNextTransitionSelection(_BMDSwitcherTransitionSelection.bmdSwitcherTransitionSelectionBackground);
             currentKey = 1;
-
+            currentkeyBut = keyWordsBut;
+            }
+            else
+            {
+                keyWordsBut.IsChecked = false;
+                currentkeyBut.IsChecked = true;
+                if (currentKey == 1)
+                {
+                    keyWordsBut.IsChecked = true;
+                }
+            }
 
         }
 
@@ -612,75 +648,139 @@ namespace Trinity_ATEM_Switcher
             System.Threading.Thread.Sleep(100);
             m_transition.SetNextTransitionSelection(_BMDSwitcherTransitionSelection.bmdSwitcherTransitionSelectionBackground);
             currentKey = -1;
+                //System.Threading.Thread.Sleep(200);
+                //m_mixEffectBlock1.GetInt(_BMDSwitcherMixEffectBlockPropertyId.bmdSwitcherMixEffectBlockPropertyIdPreviewInput, out currentPreview);
+                //setCurrent Program ID
+                //m_mixEffectBlock1.GetInt(_BMDSwitcherMixEffectBlockPropertyId.bmdSwitcherMixEffectBlockPropertyIdProgramInput, out currentProgram);
+                //updateProgPrevUI(currentPreview, false);
+                //updateProgPrevUI(currentProgram, true);
             }
         }
 
         private void keyLeftBut_Click(object sender, RoutedEventArgs e)
         {
+                if (currentKey == -1)
+                {
+                    m_transition = (BMDSwitcherAPI.IBMDSwitcherTransitionParameters)m_mixEffectBlock1;
+                    _BMDSwitcherTransitionSelection transitionselection;
+                    m_transition.GetNextTransitionSelection(out transitionselection);
+                    string stringtransitionselection = transitionselection.ToString();
+                    m_transition.SetNextTransitionSelection(_BMDSwitcherTransitionSelection.bmdSwitcherTransitionSelectionKey2);
+                    if (m_mixEffectBlock1 != null)
+                    {
+                        m_mixEffectBlock1.PerformAutoTransition();
+                    }
+                    if (stringtransitionselection != "bmdSwitcherTransitionSelectionBackground")
+                    {
+                        m_transition.GetNextTransitionStyle(out existing_style);
+                        m_transition.SetNextTransitionStyle(_BMDSwitcherTransitionStyle.bmdSwitcherTransitionStyleMix);
+                        m_mixEffectBlock1.PerformAutoTransition();
+                    }
+                    m_mixEffectBlock1.SetInt(_BMDSwitcherMixEffectBlockPropertyId.bmdSwitcherMixEffectBlockPropertyIdPreviewInput,
+                         currentPreview);
 
-            m_transition = (BMDSwitcherAPI.IBMDSwitcherTransitionParameters)m_mixEffectBlock1;
-            _BMDSwitcherTransitionSelection transitionselection;
-            m_transition.GetNextTransitionSelection(out transitionselection);
-            string stringtransitionselection = transitionselection.ToString();
-            m_transition.SetNextTransitionSelection(_BMDSwitcherTransitionSelection.bmdSwitcherTransitionSelectionKey2);
-            if (m_mixEffectBlock1 != null)
-            {
-                m_mixEffectBlock1.PerformAutoTransition();
-            }
-            if (stringtransitionselection != "bmdSwitcherTransitionSelectionBackground")
-            {
-                m_transition.GetNextTransitionStyle(out existing_style);
-                m_transition.SetNextTransitionStyle(_BMDSwitcherTransitionStyle.bmdSwitcherTransitionStyleMix);
-                m_mixEffectBlock1.PerformAutoTransition();
-            }
-            m_mixEffectBlock1.SetInt(_BMDSwitcherMixEffectBlockPropertyId.bmdSwitcherMixEffectBlockPropertyIdPreviewInput,
-                 currentPreview);
+                    System.Threading.Thread.Sleep(100);
+                    m_transition.SetNextTransitionSelection(_BMDSwitcherTransitionSelection.bmdSwitcherTransitionSelectionBackground);
+                    currentKey = 2;
+                    currentkeyBut = keyLeftBut;
 
-            System.Threading.Thread.Sleep(100);
-            m_transition.SetNextTransitionSelection(_BMDSwitcherTransitionSelection.bmdSwitcherTransitionSelectionBackground);
-            currentKey = 2;
-        }
+
+                } else {
+                        keyLeftBut.IsChecked = false;
+                        currentkeyBut.IsChecked = true;
+                if (currentKey == 2)
+                    {
+                        keyLeftBut.IsChecked = true;
+                    }
+                }
+            }
 
         private void keyRightBut_Click(object sender, RoutedEventArgs e)
         {
-            m_transition = (BMDSwitcherAPI.IBMDSwitcherTransitionParameters)m_mixEffectBlock1;
-            _BMDSwitcherTransitionSelection transitionselection;
-            m_transition.GetNextTransitionSelection(out transitionselection);
-            string stringtransitionselection = transitionselection.ToString();
-            m_transition.SetNextTransitionSelection(_BMDSwitcherTransitionSelection.bmdSwitcherTransitionSelectionKey3);
-            if (m_mixEffectBlock1 != null)
+            if (currentKey ==-1)
             {
-                m_mixEffectBlock1.PerformAutoTransition();
-            }
-            if (stringtransitionselection != "bmdSwitcherTransitionSelectionBackground")
-            {
-                m_transition.GetNextTransitionStyle(out existing_style);
-                m_transition.SetNextTransitionStyle(_BMDSwitcherTransitionStyle.bmdSwitcherTransitionStyleMix);
-                m_mixEffectBlock1.PerformAutoTransition();
-            }
-            m_mixEffectBlock1.SetInt(_BMDSwitcherMixEffectBlockPropertyId.bmdSwitcherMixEffectBlockPropertyIdPreviewInput,
-                 currentPreview);
+                m_transition = (BMDSwitcherAPI.IBMDSwitcherTransitionParameters)m_mixEffectBlock1;
+                _BMDSwitcherTransitionSelection transitionselection;
+                m_transition.GetNextTransitionSelection(out transitionselection);
+                string stringtransitionselection = transitionselection.ToString();
+                m_transition.SetNextTransitionSelection(_BMDSwitcherTransitionSelection.bmdSwitcherTransitionSelectionKey3);
+                if (m_mixEffectBlock1 != null)
+                {
+                    m_mixEffectBlock1.PerformAutoTransition();
+                }
+                if (stringtransitionselection != "bmdSwitcherTransitionSelectionBackground")
+                {
+                    m_transition.GetNextTransitionStyle(out existing_style);
+                    m_transition.SetNextTransitionStyle(_BMDSwitcherTransitionStyle.bmdSwitcherTransitionStyleMix);
+                    m_mixEffectBlock1.PerformAutoTransition();
+                }
+                m_mixEffectBlock1.SetInt(_BMDSwitcherMixEffectBlockPropertyId.bmdSwitcherMixEffectBlockPropertyIdPreviewInput,
+                     currentPreview);
 
-            System.Threading.Thread.Sleep(100);
-            m_transition.SetNextTransitionSelection(_BMDSwitcherTransitionSelection.bmdSwitcherTransitionSelectionBackground);
-            currentKey = 3;
+                System.Threading.Thread.Sleep(100);
+                m_transition.SetNextTransitionSelection(_BMDSwitcherTransitionSelection.bmdSwitcherTransitionSelectionBackground);
+                currentKey = 3;
+                currentkeyBut = keyRightBut;
+
+            }
+            else
+            {
+                keyRightBut.IsChecked = false;
+                currentkeyBut.IsChecked = true;
+                if (currentKey == 3)
+                {
+                    keyRightBut.IsChecked = true;
+                }
+            }
         }
 
         private void keyFullBut_Click(object sender, RoutedEventArgs e)
         {
-            keyClearBut_Click(this, null);
-            if (m_mixEffectBlock1 != null)
+            if (currentKey == -1)
             {
-                m_mixEffectBlock1.SetInt(_BMDSwitcherMixEffectBlockPropertyId.bmdSwitcherMixEffectBlockPropertyIdProgramInput,
-                   6);
-                keyFullBut.IsChecked = true;
+                keyClearBut_Click(this, null);
+                if (m_mixEffectBlock1 != null)
+                {
+                    m_mixEffectBlock1.SetInt(_BMDSwitcherMixEffectBlockPropertyId.bmdSwitcherMixEffectBlockPropertyIdProgramInput,
+                       6);
+
+                    keyFullBut.IsChecked = true;
+                    currentKey = 6;
+                    currentkeyBut = keyFullBut;
+                    m_mixEffectBlock1.SetInt(_BMDSwitcherMixEffectBlockPropertyId.bmdSwitcherMixEffectBlockPropertyIdPreviewInput,
+                     currentPreview);
+
+                    //System.Threading.Thread.Sleep(100);
+                    //m_transition.SetNextTransitionSelection(_BMDSwitcherTransitionSelection.bmdSwitcherTransitionSelectionBackground);
+                    //m_mixEffectBlock1.GetInt(_BMDSwitcherMixEffectBlockPropertyId.bmdSwitcherMixEffectBlockPropertyIdPreviewInput, out currentPreview);
+                    //setCurrent Program ID
+                    //m_mixEffectBlock1.GetInt(_BMDSwitcherMixEffectBlockPropertyId.bmdSwitcherMixEffectBlockPropertyIdProgramInput, out currentProgram);
+                    //updateProgPrevUI(currentPreview, false);
+                    //updateProgPrevUI(currentProgram, true);
+                }
+                
             }
+            else
+            {
+                keyFullBut.IsChecked = false;
+                currentkeyBut.IsChecked = true;
+                if (currentKey == 6)
+                {
+                    keyFullBut.IsChecked = true;
+                }
+            }
+
+
 
         }
 
         private void keyGreenScreenBut_Click(object sender, RoutedEventArgs e)
         {
-            m_transition = (BMDSwitcherAPI.IBMDSwitcherTransitionParameters)m_mixEffectBlock1;
+            
+            if (currentKey == -1)
+            {
+                
+                m_transition = (BMDSwitcherAPI.IBMDSwitcherTransitionParameters)m_mixEffectBlock1;
             _BMDSwitcherTransitionSelection transitionselection;
             m_transition.GetNextTransitionSelection(out transitionselection);
             string stringtransitionselection = transitionselection.ToString();
@@ -701,6 +801,88 @@ namespace Trinity_ATEM_Switcher
             System.Threading.Thread.Sleep(100);
             m_transition.SetNextTransitionSelection(_BMDSwitcherTransitionSelection.bmdSwitcherTransitionSelectionBackground);
             currentKey = 4;
+                currentkeyBut = keyGreenScreenBut;
+            }
+            else
+            {
+                keyGreenScreenBut.IsChecked = false;
+                currentkeyBut.IsChecked = true;
+                if (currentKey == 4)
+                {
+                    keyGreenScreenBut.IsChecked = true;
+                }
+
+            }
+            
         }
+
+        private void UpdateTransitionFramesRemaining()
+        {
+            long framesRemaining;
+
+            m_mixEffectBlock1.GetInt(_BMDSwitcherMixEffectBlockPropertyId.bmdSwitcherMixEffectBlockPropertyIdTransitionFramesRemaining, out framesRemaining);
+
+            //textBoxTransFramesRemaining.Text = String.Format("{0}", framesRemaining);
+            if (framesRemaining == 0)
+            {
+                m_mixEffectBlock1.GetInt(_BMDSwitcherMixEffectBlockPropertyId.bmdSwitcherMixEffectBlockPropertyIdPreviewInput, out currentPreview);
+                //setCurrent Program ID
+                m_mixEffectBlock1.GetInt(_BMDSwitcherMixEffectBlockPropertyId.bmdSwitcherMixEffectBlockPropertyIdProgramInput, out currentProgram);
+                updateProgPrevUI(currentPreview, false);
+                updateProgPrevUI(currentProgram, true);
+            }
+            
+        }
+
+
+        
+
+        private void UpdateSliderPosition()
+        {
+            double transitionPos;
+
+            m_mixEffectBlock1.GetFloat(_BMDSwitcherMixEffectBlockPropertyId.bmdSwitcherMixEffectBlockPropertyIdTransitionPosition, out transitionPos);
+
+            m_currentTransitionReachedHalfway = (transitionPos >= 0.50);
+
+            if (m_moveSliderDownwards)
+                trackBarTransitionPos.Value = 100 - (int)(transitionPos * 100);
+            else
+                trackBarTransitionPos.Value = (int)(transitionPos * 100);
+        }
+
+        private void OnInTransitionChanged()
+        {
+            int inTransition;
+
+            m_mixEffectBlock1.GetFlag(_BMDSwitcherMixEffectBlockPropertyId.bmdSwitcherMixEffectBlockPropertyIdInTransition, out inTransition);
+
+            if (inTransition == 0)
+            {
+                // Toggle the starting orientation of slider handle if a transition has passed through halfway
+                if (m_currentTransitionReachedHalfway)
+                {
+                    m_moveSliderDownwards = !m_moveSliderDownwards;
+                    UpdateSliderPosition();
+                }
+                m_currentTransitionReachedHalfway = false;
+            }
+        }
+
+        private void UpdateProgramButtonSelection()
+        {
+
+            m_mixEffectBlock1.GetInt(_BMDSwitcherMixEffectBlockPropertyId.bmdSwitcherMixEffectBlockPropertyIdProgramInput, out currentProgram);
+            updateProgPrevUI(currentProgram, true);
+        }
+
+        private void UpdatePreviewButtonSelection()
+        {
+            m_mixEffectBlock1.GetInt(_BMDSwitcherMixEffectBlockPropertyId.bmdSwitcherMixEffectBlockPropertyIdPreviewInput, out currentPreview);
+            updateProgPrevUI(currentPreview, false);
+        }
+
     }
+
+
 }
