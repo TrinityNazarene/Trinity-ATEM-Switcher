@@ -37,7 +37,7 @@ namespace Trinity_ATEM_Switcher
         private long currentKey;
         private RadioButton currentkeyBut;
         private bool m_currentTransitionReachedHalfway = false;
-
+        private List<AuxMonitor> m_auxMonitors = new List<AuxMonitor>();
         public MainWindow()
         {
             InitializeComponent();
@@ -84,6 +84,13 @@ namespace Trinity_ATEM_Switcher
                 }
                 return;
             }
+
+            m_mixEffectBlockMonitor.ProgramInputChanged += new SwitcherEventHandler((s, a) => this.Dispatcher.Invoke((Action)(() => UpdateProgramButtonSelection())));
+            m_mixEffectBlockMonitor.PreviewInputChanged += new SwitcherEventHandler((s, a) => this.Dispatcher.Invoke((Action)(() => UpdatePreviewButtonSelection())));
+            m_mixEffectBlockMonitor.TransitionFramesRemainingChanged += new SwitcherEventHandler((s, a) => this.Dispatcher.Invoke((Action)(() => UpdateTransitionFramesRemaining())));
+            m_mixEffectBlockMonitor.TransitionPositionChanged += new SwitcherEventHandler((s, a) => this.Dispatcher.Invoke((Action)(() => UpdateSliderPosition())));
+            m_mixEffectBlockMonitor.InTransitionChanged += new SwitcherEventHandler((s, a) => this.Dispatcher.Invoke((Action)(() => OnInTransitionChanged())));
+
 
             SwitcherConnected();
         }
@@ -162,17 +169,13 @@ namespace Trinity_ATEM_Switcher
 
             // Install MixEffectBlockMonitor callbacks:
             m_mixEffectBlock1.AddCallback(m_mixEffectBlockMonitor);
-
             //MixEffectBlockSetEnable(true);
             getInputNames();
-            //UpdateTransitionFramesRemaining();
-            //UpdateSliderPosition();
+            addAUXCallback();
 
-            m_mixEffectBlockMonitor.ProgramInputChanged += new SwitcherEventHandler((s, a) => this.Dispatcher.Invoke((Action)(() => UpdateProgramButtonSelection())));
-            m_mixEffectBlockMonitor.PreviewInputChanged += new SwitcherEventHandler((s, a) => this.Dispatcher.Invoke((Action)(() => UpdatePreviewButtonSelection())));
-            m_mixEffectBlockMonitor.TransitionFramesRemainingChanged += new SwitcherEventHandler((s, a) => this.Dispatcher.Invoke((Action)(() => UpdateTransitionFramesRemaining())));
-            m_mixEffectBlockMonitor.TransitionPositionChanged += new SwitcherEventHandler((s, a) => this.Dispatcher.Invoke((Action)(() => UpdateSliderPosition())));
-            m_mixEffectBlockMonitor.InTransitionChanged += new SwitcherEventHandler((s, a) => this.Dispatcher.Invoke((Action)(() => OnInTransitionChanged())));
+
+
+
 
             //setCurrent preview ID
             m_mixEffectBlock1.GetInt(_BMDSwitcherMixEffectBlockPropertyId.bmdSwitcherMixEffectBlockPropertyIdPreviewInput, out currentPreview);
@@ -369,6 +372,43 @@ namespace Trinity_ATEM_Switcher
 
 
         }
+
+        private void addAUXCallback()
+        {
+
+
+
+            IBMDSwitcherInputIterator inputIterator = null;
+            IntPtr inputIteratorPtr;
+            Guid inputIteratorIID = typeof(IBMDSwitcherInputIterator).GUID;
+            m_switcher.CreateIterator(ref inputIteratorIID, out inputIteratorPtr);
+            if (inputIteratorPtr != null)
+            {
+                inputIterator = (IBMDSwitcherInputIterator)Marshal.GetObjectForIUnknown(inputIteratorPtr);
+            }
+
+            if (inputIterator != null)
+            {
+                IBMDSwitcherInput input;
+                inputIterator.Next(out input);
+                int AUXCount = 0;
+                while (input != null)
+                {
+                    BMDSwitcherAPI._BMDSwitcherPortType inputPortType;
+                    input.GetPortType(out inputPortType);
+                    if (inputPortType == BMDSwitcherAPI._BMDSwitcherPortType.bmdSwitcherPortTypeAuxOutput)
+                    {
+                        AuxMonitor WkMonitor = new AuxMonitor(AUXCount++);
+                        WkMonitor.AuxSourceChanged += new SwitcherEventHandler(OnAuxSourceChanged);
+                        ((IBMDSwitcherInputAux)input).AddCallback(WkMonitor);
+                        m_auxMonitors.Add(WkMonitor);
+                    }
+                    inputIterator.Next(out input);
+                }
+            }
+
+
+    }
 
         private void UpdateAuxSourceCombos()
         {
@@ -748,7 +788,7 @@ namespace Trinity_ATEM_Switcher
                     currentKey = 6;
                     currentkeyBut = keyFullBut;
                     m_mixEffectBlock1.SetInt(_BMDSwitcherMixEffectBlockPropertyId.bmdSwitcherMixEffectBlockPropertyIdPreviewInput,
-                     currentPreview);
+                     currentProgram);
 
                     //System.Threading.Thread.Sleep(100);
                     //m_transition.SetNextTransitionSelection(_BMDSwitcherTransitionSelection.bmdSwitcherTransitionSelectionBackground);
@@ -849,6 +889,11 @@ namespace Trinity_ATEM_Switcher
                 trackBarTransitionPos.Value = 100 - (int)(transitionPos * 100);
             else
                 trackBarTransitionPos.Value = (int)(transitionPos * 100);
+        }
+
+        private void OnAuxSourceChanged(object sender, object args)
+        {
+            this.Dispatcher.Invoke((Action)(() => UpdateAuxSourceCombos()));
         }
 
         private void OnInTransitionChanged()
