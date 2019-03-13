@@ -289,7 +289,7 @@
                     </LinearGradientBrush>
                 </RadioButton.Background> Camera 4
             </RadioButton>
-            <RadioButton Style="{StaticResource RedToggleNoOverButton}" x:Name="progBut6" GroupName="ProgGroup" Grid.Row="2" Grid.Column="2" Tag="3010" Click="progBut_Click" FontWeight="Bold" FontSize="18" Foreground="#FFCCCCCC">
+            <RadioButton Style="{StaticResource RedToggleNoOverButton}" x:Name="progBut6" GroupName="ProgGroup" Grid.Row="2" Grid.Column="2" Tag="1" Click="progBut_Click" FontWeight="Bold" FontSize="18" Foreground="#FFCCCCCC">
                 <RadioButton.Background>
                     <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                         <GradientStop Color="#FF565656" Offset="0"/>
@@ -310,13 +310,13 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Text="Slide Insert" FontSize="18" FontWeight="Bold" Foreground="White" />
-            <RadioButton Style="{StaticResource RedToggleNoOverButton}" GroupName="KeyGroup" x:Name="keyFullBut" Grid.Row="1" Grid.Column="0" Click="keyFullBut_Click" FontWeight="Bold" FontSize="18" Foreground="#FFCCCCCC">
+            <RadioButton Style="{StaticResource RedToggleNoOverButton}" GroupName="KeyGroup" x:Name="keyLeftBut" Grid.Row="1" Grid.Column="0" Click="keyLeftBut_Click" FontWeight="Bold" FontSize="18" Foreground="#FFCCCCCC">
                 <RadioButton.Background>
                     <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                         <GradientStop Color="#FF565656" Offset="0"/>
                         <GradientStop Color="#FF323232" Offset="1"/>
                     </LinearGradientBrush>
-                </RadioButton.Background> Full
+                </RadioButton.Background> Left
             </RadioButton>
             <RadioButton Style="{StaticResource RedToggleNoOverButton}" GroupName="KeyGroup" x:Name="keyWordsBut" Grid.Row="1" Grid.Column="1" Click="keyWordsBut_Click" FontWeight="Bold" FontSize="18" Foreground="#FFCCCCCC">
                 <RadioButton.Background>
@@ -326,21 +326,21 @@
                     </LinearGradientBrush>
                 </RadioButton.Background> Words
             </RadioButton>
-            <RadioButton Style="{StaticResource RedToggleNoOverButton}" GroupName="KeyGroup" x:Name="keyGreenScreenBut" Grid.Row="1" Grid.Column="2" Click="keyGreenScreenBut_Click" FontWeight="Bold" FontSize="18" Foreground="#FFCCCCCC">
+            <RadioButton Style="{StaticResource RedToggleNoOverButton}" GroupName="KeyGroup" x:Name="keyRightBut" Grid.Row="1" Grid.Column="2" Click="keyRightBut_Click" FontWeight="Bold" FontSize="18" Foreground="#FFCCCCCC">
                 <RadioButton.Background>
                     <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                         <GradientStop Color="#FF565656" Offset="0"/>
                         <GradientStop Color="#FF323232" Offset="1"/>
                     </LinearGradientBrush>
-                </RadioButton.Background> Green Screen
+                </RadioButton.Background> Right
             </RadioButton>
-            <RadioButton Style="{StaticResource RedToggleNoOverButton}" GroupName="KeyGroup" x:Name="keyLeftBut" Grid.Row="2" Grid.Column="0" Click="keyLeftBut_Click" FontWeight="Bold" FontSize="18" Foreground="#FFCCCCCC">
+            <RadioButton Style="{StaticResource RedToggleNoOverButton}" GroupName="KeyGroup" x:Name="keyFullBut" Grid.Row="2" Grid.Column="0" Click="keyFullBut_Click" FontWeight="Bold" FontSize="18" Foreground="#FFCCCCCC">
                 <RadioButton.Background>
                     <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                         <GradientStop Color="#FF565656" Offset="0"/>
                         <GradientStop Color="#FF323232" Offset="1"/>
                     </LinearGradientBrush>
-                </RadioButton.Background> Left
+                </RadioButton.Background> Full
             </RadioButton>
             <Button x:Name="keyClearBut" Grid.Row="2" Grid.Column="1" Content="Clear" FontSize="18" FontWeight="Bold" Click="keyClearBut_Click" Template="{DynamicResource ButtonBaseControlNoOverState}" Foreground="#FFCCCCCC">
                 <Button.Background>
@@ -350,13 +350,13 @@
                     </LinearGradientBrush>
                 </Button.Background>
             </Button>
-            <RadioButton Style="{StaticResource RedToggleNoOverButton}" GroupName="KeyGroup" x:Name="keyRightBut" Grid.Row="2" Grid.Column="2" Click="keyRightBut_Click" FontWeight="Bold" FontSize="18" Foreground="#FFCCCCCC">
+            <RadioButton Style="{StaticResource RedToggleNoOverButton}" GroupName="KeyGroup" x:Name="keyGreenScreenBut" Grid.Row="2" Grid.Column="2" Click="keyGreenScreenBut_Click" FontWeight="Bold" FontSize="18" Foreground="#FFCCCCCC">
                 <RadioButton.Background>
                     <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                         <GradientStop Color="#FF565656" Offset="0"/>
                         <GradientStop Color="#FF323232" Offset="1"/>
                     </LinearGradientBrush>
-                </RadioButton.Background> Right
+                </RadioButton.Background> Green Screen
             </RadioButton>
         </Grid>
         <Grid Grid.Row="2" Grid.Column="0" Margin="10">
@@ -412,7 +412,7 @@
                     </LinearGradientBrush>
                 </RadioButton.Background> Camera 4
             </RadioButton>
-            <RadioButton Style="{StaticResource GreenToggleButton}" GroupName="PrevGroup" x:Name="prevBut6" Grid.Row="2" Grid.Column="2" Tag="3010" Click="prevBut_Click" FontWeight="Bold" FontSize="18" Foreground="#FFCCCCCC">
+            <RadioButton Style="{StaticResource GreenToggleButton}" GroupName="PrevGroup" x:Name="prevBut6" Grid.Row="2" Grid.Column="2" Tag="1" Click="prevBut_Click" FontWeight="Bold" FontSize="18" Foreground="#FFCCCCCC">
                 <RadioButton.Background>
                     <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                         <GradientStop Color="#FF565656" Offset="0"/>
@@ -509,7 +509,7 @@
                         </LinearGradientBrush>
                     </RadioButton.Background> Camera 4
                 </RadioButton>
-                <RadioButton Style="{StaticResource YellowToggleButton}" GroupName="aux1Group" x:Name="aux1But9" Grid.Row="3" Grid.Column="2" Tag="1,3010" Click="Aux_Click" FontWeight="Bold" FontSize="18" Foreground="#FFCCCCCC">
+                <RadioButton Style="{StaticResource YellowToggleButton}" GroupName="aux1Group" x:Name="aux1But9" Grid.Row="3" Grid.Column="2" Tag="1,1" Click="Aux_Click" FontWeight="Bold" FontSize="18" Foreground="#FFCCCCCC">
                     <RadioButton.Background>
                         <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                             <GradientStop Color="#FF565656" Offset="0"/>
@@ -522,9 +522,9 @@
         <Grid Grid.Row="1" Grid.Column="1" Margin="10">
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto" />
-
                 <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="40"/>
             </Grid.RowDefinitions>
             <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Text="Broadcast" FontSize="18" FontWeight="Bold" Foreground="White" />
             <Grid Grid.Row="1">
@@ -540,7 +540,7 @@
                         </LinearGradientBrush>
                     </RadioButton.Background> Normal
                 </RadioButton>
-                <RadioButton Style="{StaticResource YellowToggleButton}" GroupName="aux2Group" x:Name="aux2But2" Grid.Column="1" Tag="3,3010" Click="Aux_Click" FontWeight="Bold" FontSize="18" Foreground="#FFCCCCCC">
+                <RadioButton Style="{StaticResource YellowToggleButton}" GroupName="aux2Group" x:Name="aux2But2" Grid.Column="1" Tag="3,1" Click="Aux_Click" FontWeight="Bold" FontSize="18" Foreground="#FFCCCCCC">
                     <RadioButton.Background>
                         <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                             <GradientStop Color="#FF565656" Offset="0"/>
@@ -599,13 +599,36 @@
                         </LinearGradientBrush>
                     </RadioButton.Background> Camera 4
                 </RadioButton>
-                <RadioButton Style="{StaticResource YellowToggleButton}" GroupName="aux2Group" x:Name="aux2But8" Grid.Row="3" Grid.Column="2" Tag="3,3010" Click="Aux_Click" FontWeight="Bold" FontSize="18" Foreground="#FFCCCCCC">
+                <RadioButton Style="{StaticResource YellowToggleButton}" GroupName="aux2Group" x:Name="aux2But8" Grid.Row="3" Grid.Column="2" Tag="3,1" Click="Aux_Click" FontWeight="Bold" FontSize="18" Foreground="#FFCCCCCC">
                     <RadioButton.Background>
                         <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                             <GradientStop Color="#FF565656" Offset="0"/>
                             <GradientStop Color="#FF323232" Offset="1"/>
                         </LinearGradientBrush>
                     </RadioButton.Background> Announcements
+                </RadioButton>
+
+            </Grid>
+            <Grid Grid.Row="3">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <RadioButton Style="{StaticResource YellowToggleButton}" GroupName="aux2Group2" x:Name="aux2But9" Grid.Column="0" Tag="6,1201" Click="Aux_Click_Audio" FontWeight="Bold" FontSize="18" Foreground="#FFCCCCCC">
+                    <RadioButton.Background>
+                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                            <GradientStop Color="#FF565656" Offset="0"/>
+                            <GradientStop Color="#FF323232" Offset="1"/>
+                        </LinearGradientBrush>
+                    </RadioButton.Background> Sacuary Audio
+                </RadioButton>
+                <RadioButton Style="{StaticResource YellowToggleButton}" GroupName="aux2Group2" x:Name="aux2But10" Grid.Column="1" Tag="1201,6" Click="Aux_Click_Audio" FontWeight="Bold" FontSize="18" Foreground="#FFCCCCCC">
+                    <RadioButton.Background>
+                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                            <GradientStop Color="#FF565656" Offset="0"/>
+                            <GradientStop Color="#FF323232" Offset="1"/>
+                        </LinearGradientBrush>
+                    </RadioButton.Background> Spotify Audio
                 </RadioButton>
             </Grid>
         </Grid>

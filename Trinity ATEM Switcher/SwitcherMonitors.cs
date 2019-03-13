@@ -33,6 +33,150 @@ using BMDSwitcherAPI;
 namespace Trinity_ATEM_Switcher
 {
     public delegate void SwitcherEventHandler(object sender, object args);
+    class AudioMixerMonitorOutputMonitor : IBMDSwitcherAudioMonitorOutputCallback
+    {
+        //Events:
+        public event SwitcherEventHandler LevelNotificationChanged;
+        public event SwitcherEventHandler DimChanged;
+        public event SwitcherEventHandler DimLevelChanged;
+        public event SwitcherEventHandler GainChanged;
+        public event SwitcherEventHandler MonitorEnableChanged;
+        public event SwitcherEventHandler MuteChanged;
+        public event SwitcherEventHandler SoloChanged;
+        public event SwitcherEventHandler SoloInputChanged;
+
+        public AudioMixerMonitorOutputMonitor()
+        {
+        }
+
+        void IBMDSwitcherAudioMonitorOutputCallback.LevelNotification(double Left, double Right, double PeakLeft, double PeakRight)
+        {
+            if (LevelNotificationChanged != null)
+                LevelNotificationChanged(this, null);
+        }
+
+        void IBMDSwitcherAudioMonitorOutputCallback.Notify(_BMDSwitcherAudioMonitorOutputEventType EventType)
+        {
+            switch (EventType)
+            {
+                case (_BMDSwitcherAudioMonitorOutputEventType.bmdSwitcherAudioMonitorOutputEventTypeDimChanged):
+                    if (DimChanged != null)
+                        DimChanged(this, null);
+                    break;
+
+                case (_BMDSwitcherAudioMonitorOutputEventType.bmdSwitcherAudioMonitorOutputEventTypeDimLevelChanged):
+                    if (DimLevelChanged != null)
+                        DimLevelChanged(this, null);
+                    break;
+
+                case (_BMDSwitcherAudioMonitorOutputEventType.bmdSwitcherAudioMonitorOutputEventTypeGainChanged):
+                    if (GainChanged != null)
+                        GainChanged(this, null);
+                    break;
+
+                case (_BMDSwitcherAudioMonitorOutputEventType.bmdSwitcherAudioMonitorOutputEventTypeMonitorEnableChanged):
+                    if (MonitorEnableChanged != null)
+                        MonitorEnableChanged(this, null);
+                    break;
+
+                case (_BMDSwitcherAudioMonitorOutputEventType.bmdSwitcherAudioMonitorOutputEventTypeMuteChanged):
+                    if (MuteChanged != null)
+                        MuteChanged(this, null);
+                    break;
+
+                case (_BMDSwitcherAudioMonitorOutputEventType.bmdSwitcherAudioMonitorOutputEventTypeSoloChanged):
+                    if (SoloChanged != null)
+                        SoloChanged(this, null);
+                    break;
+
+                case (_BMDSwitcherAudioMonitorOutputEventType.bmdSwitcherAudioMonitorOutputEventTypeSoloInputChanged):
+                    if (SoloInputChanged != null)
+                        SoloInputChanged(this, null);
+                    break;
+            }
+        }
+    }
+
+    class AudioMixerMonitor : IBMDSwitcherAudioMixerCallback
+    {
+        //Events:
+        public event SwitcherEventHandler ProgramOutLevelNotificationChanged;
+        public event SwitcherEventHandler ProgramOutBalanceChanged;
+        public event SwitcherEventHandler ProgramOutGainChanged;
+
+        public AudioMixerMonitor()
+        {
+        }
+
+        void IBMDSwitcherAudioMixerCallback.Notify(_BMDSwitcherAudioMixerEventType EventType)
+        {
+            switch (EventType)
+            {
+                case (_BMDSwitcherAudioMixerEventType.bmdSwitcherAudioMixerEventTypeProgramOutBalanceChanged):
+                    if (ProgramOutBalanceChanged != null)
+                        ProgramOutBalanceChanged(this, null);
+                    break;
+
+                case (_BMDSwitcherAudioMixerEventType.bmdSwitcherAudioMixerEventTypeProgramOutGainChanged):
+                    if (ProgramOutGainChanged != null)
+                        ProgramOutGainChanged(this, null);
+                    break;
+            }
+        }
+
+        void IBMDSwitcherAudioMixerCallback.ProgramOutLevelNotification(double Left, double Right, double PeakLeft, double PeakRight)
+        {
+            if (ProgramOutLevelNotificationChanged != null)
+                ProgramOutLevelNotificationChanged(this, null);
+        }
+    }
+
+    class AudioInputMonitor : IBMDSwitcherAudioInputCallback
+    {
+        //Events:
+        public event SwitcherEventHandler LevelNotificationChanged;
+        public event SwitcherEventHandler BalanceChanged;
+        public event SwitcherEventHandler GainChanged;
+        public event SwitcherEventHandler IsMixedInChanged;
+        public event SwitcherEventHandler MixOptionChanged;
+
+        public AudioInputMonitor()
+        {
+        }
+
+        void IBMDSwitcherAudioInputCallback.LevelNotification(double Left, double Right, double PeakLeft, double PeakRight)
+        {
+            if (LevelNotificationChanged != null)
+                LevelNotificationChanged(this, null);
+        }
+
+        void IBMDSwitcherAudioInputCallback.Notify(_BMDSwitcherAudioInputEventType audioType)
+        {
+            switch (audioType)
+            {
+                case (_BMDSwitcherAudioInputEventType.bmdSwitcherAudioInputEventTypeBalanceChanged):
+                    if (BalanceChanged != null)
+                        BalanceChanged(this, null);
+                    break;
+
+                case (_BMDSwitcherAudioInputEventType.bmdSwitcherAudioInputEventTypeGainChanged):
+                    if (GainChanged != null)
+                        GainChanged(this, null);
+                    break;
+
+                case (_BMDSwitcherAudioInputEventType.bmdSwitcherAudioInputEventTypeIsMixedInChanged):
+                    if (IsMixedInChanged != null)
+                        IsMixedInChanged(this, null);
+                    break;
+
+                case (_BMDSwitcherAudioInputEventType.bmdSwitcherAudioInputEventTypeMixOptionChanged):
+                    if (MixOptionChanged != null)
+                        MixOptionChanged(this, null);
+                    break;
+            }
+        }
+    }
+
 
     class SwitcherMonitor : IBMDSwitcherCallback
     {
@@ -143,4 +287,233 @@ namespace Trinity_ATEM_Switcher
             }
         }
     }
+
+    class KeyMonitor : IBMDSwitcherKeyCallback
+    {
+        public event SwitcherEventHandler CanBeDVEKeyChanged;
+        public event SwitcherEventHandler InputCutChanged;
+        public event SwitcherEventHandler InputFillChanged;
+        public event SwitcherEventHandler MaskBottomChanged;
+        public event SwitcherEventHandler MaskedChanged;
+        public event SwitcherEventHandler MaskLeftChanged;
+        public event SwitcherEventHandler MaskRightChanged;
+        public event SwitcherEventHandler MaskTopChanged;
+        public event SwitcherEventHandler OnAirChanged;
+        public event SwitcherEventHandler TypeChanged;
+
+        public KeyMonitor()
+        {
+        }
+
+        void IBMDSwitcherKeyCallback.Notify(_BMDSwitcherKeyEventType EventType)
+        {
+            switch (EventType)
+            {
+                case (_BMDSwitcherKeyEventType.bmdSwitcherKeyEventTypeCanBeDVEKeyChanged):
+                    if (CanBeDVEKeyChanged != null)
+                        CanBeDVEKeyChanged(this, null);
+                    break;
+
+                case (_BMDSwitcherKeyEventType.bmdSwitcherKeyEventTypeInputCutChanged):
+                    if (InputCutChanged != null)
+                        InputCutChanged(this, null);
+                    break;
+
+                case (_BMDSwitcherKeyEventType.bmdSwitcherKeyEventTypeInputFillChanged):
+                    if (InputFillChanged != null)
+                        InputFillChanged(this, null);
+                    break;
+
+                case (_BMDSwitcherKeyEventType.bmdSwitcherKeyEventTypeMaskBottomChanged):
+                    if (MaskBottomChanged != null)
+                        MaskBottomChanged(this, null);
+                    break;
+
+                case (_BMDSwitcherKeyEventType.bmdSwitcherKeyEventTypeMaskedChanged):
+                    if (MaskedChanged != null)
+                        MaskedChanged(this, null);
+                    break;
+
+                case (_BMDSwitcherKeyEventType.bmdSwitcherKeyEventTypeMaskLeftChanged):
+                    if (MaskLeftChanged != null)
+                        MaskLeftChanged(this, null);
+                    break;
+
+                case (_BMDSwitcherKeyEventType.bmdSwitcherKeyEventTypeMaskRightChanged):
+                    if (MaskRightChanged != null)
+                        MaskRightChanged(this, null);
+                    break;
+
+                case (_BMDSwitcherKeyEventType.bmdSwitcherKeyEventTypeMaskTopChanged):
+                    if (MaskTopChanged != null)
+                        MaskTopChanged(this, null);
+                    break;
+
+                case (_BMDSwitcherKeyEventType.bmdSwitcherKeyEventTypeOnAirChanged):
+                    if (OnAirChanged != null)
+                        OnAirChanged(this, null);
+                    break;
+
+                case (_BMDSwitcherKeyEventType.bmdSwitcherKeyEventTypeTypeChanged):
+                    if (TypeChanged != null)
+                        TypeChanged(this, null);
+                    break;
+            }
+        }
+    }
+
+    class TransitionMonitor : IBMDSwitcherTransitionParametersCallback
+    {
+        public event SwitcherEventHandler NextTransitionSelectionChanged;
+        public event SwitcherEventHandler NextTransitionStyleChanged;
+        public event SwitcherEventHandler TransitionSelectionChanged;
+        public event SwitcherEventHandler TransitionStyleChanged;
+
+        public TransitionMonitor()
+        {
+        }
+
+        void IBMDSwitcherTransitionParametersCallback.Notify(_BMDSwitcherTransitionParametersEventType EventType)
+        {
+            switch (EventType)
+            {
+                case (_BMDSwitcherTransitionParametersEventType.bmdSwitcherTransitionParametersEventTypeNextTransitionSelectionChanged):
+                    if (NextTransitionSelectionChanged != null)
+                        NextTransitionSelectionChanged(this, null);
+                    break;
+
+                case (_BMDSwitcherTransitionParametersEventType.bmdSwitcherTransitionParametersEventTypeNextTransitionStyleChanged):
+                    if (NextTransitionStyleChanged != null)
+                        NextTransitionStyleChanged(this, null);
+                    break;
+
+                case (_BMDSwitcherTransitionParametersEventType.bmdSwitcherTransitionParametersEventTypeTransitionSelectionChanged):
+                    if (TransitionSelectionChanged != null)
+                        TransitionSelectionChanged(this, null);
+                    break;
+
+                case (_BMDSwitcherTransitionParametersEventType.bmdSwitcherTransitionParametersEventTypeTransitionStyleChanged):
+                    if (TransitionStyleChanged != null)
+                        TransitionStyleChanged(this, null);
+                    break;
+            }
+        }
+    }
+
+    class DownStreamKeyMonitor : IBMDSwitcherDownstreamKeyCallback
+    {
+        public event SwitcherEventHandler ClipChanged;
+        public event SwitcherEventHandler FramesRemainingChanged;
+        public event SwitcherEventHandler GainChanged;
+        public event SwitcherEventHandler InputCutChanged;
+        public event SwitcherEventHandler InputFillChanged;
+        public event SwitcherEventHandler InverseChanged;
+        public event SwitcherEventHandler IsAutoTransitioningChanged;
+        public event SwitcherEventHandler IsTransitioningChanged;
+        public event SwitcherEventHandler MaskBottomChanged;
+        public event SwitcherEventHandler MaskedChanged;
+        public event SwitcherEventHandler MaskLeftChanged;
+        public event SwitcherEventHandler MaskRightChanged;
+        public event SwitcherEventHandler MaskTopChanged;
+        public event SwitcherEventHandler OnAirChanged;
+        public event SwitcherEventHandler PreMultipliedChanged;
+        public event SwitcherEventHandler RateChanged;
+        public event SwitcherEventHandler TieChanged;
+
+        public DownStreamKeyMonitor()
+        {
+        }
+
+        void IBMDSwitcherDownstreamKeyCallback.Notify(_BMDSwitcherDownstreamKeyEventType EventType)
+        {
+            switch (EventType)
+            {
+                case (_BMDSwitcherDownstreamKeyEventType.bmdSwitcherDownstreamKeyEventTypeClipChanged):
+                    if (ClipChanged != null)
+                        ClipChanged(this, null);
+                    break;
+
+                case (_BMDSwitcherDownstreamKeyEventType.bmdSwitcherDownstreamKeyEventTypeFramesRemainingChanged):
+                    if (FramesRemainingChanged != null)
+                        FramesRemainingChanged(this, null);
+                    break;
+
+                case (_BMDSwitcherDownstreamKeyEventType.bmdSwitcherDownstreamKeyEventTypeGainChanged):
+                    if (GainChanged != null)
+                        GainChanged(this, null);
+                    break;
+
+                case (_BMDSwitcherDownstreamKeyEventType.bmdSwitcherDownstreamKeyEventTypeInputCutChanged):
+                    if (InputCutChanged != null)
+                        InputCutChanged(this, null);
+                    break;
+
+                case (_BMDSwitcherDownstreamKeyEventType.bmdSwitcherDownstreamKeyEventTypeInputFillChanged):
+                    if (InputFillChanged != null)
+                        InputFillChanged(this, null);
+                    break;
+
+                case (_BMDSwitcherDownstreamKeyEventType.bmdSwitcherDownstreamKeyEventTypeInverseChanged):
+                    if (InverseChanged != null)
+                        InverseChanged(this, null);
+                    break;
+
+                case (_BMDSwitcherDownstreamKeyEventType.bmdSwitcherDownstreamKeyEventTypeIsAutoTransitioningChanged):
+                    if (IsAutoTransitioningChanged != null)
+                        IsAutoTransitioningChanged(this, null);
+                    break;
+
+                case (_BMDSwitcherDownstreamKeyEventType.bmdSwitcherDownstreamKeyEventTypeIsTransitioningChanged):
+                    if (IsTransitioningChanged != null)
+                        IsTransitioningChanged(this, null);
+                    break;
+
+                case (_BMDSwitcherDownstreamKeyEventType.bmdSwitcherDownstreamKeyEventTypeMaskBottomChanged):
+                    if (MaskBottomChanged != null)
+                        MaskBottomChanged(this, null);
+                    break;
+
+                case (_BMDSwitcherDownstreamKeyEventType.bmdSwitcherDownstreamKeyEventTypeMaskedChanged):
+                    if (MaskedChanged != null)
+                        MaskedChanged(this, null);
+                    break;
+
+                case (_BMDSwitcherDownstreamKeyEventType.bmdSwitcherDownstreamKeyEventTypeMaskLeftChanged):
+                    if (MaskLeftChanged != null)
+                        MaskLeftChanged(this, null);
+                    break;
+
+                case (_BMDSwitcherDownstreamKeyEventType.bmdSwitcherDownstreamKeyEventTypeMaskRightChanged):
+                    if (MaskRightChanged != null)
+                        MaskRightChanged(this, null);
+                    break;
+
+                case (_BMDSwitcherDownstreamKeyEventType.bmdSwitcherDownstreamKeyEventTypeMaskTopChanged):
+                    if (MaskTopChanged != null)
+                        MaskTopChanged(this, null);
+                    break;
+
+                case (_BMDSwitcherDownstreamKeyEventType.bmdSwitcherDownstreamKeyEventTypeOnAirChanged):
+                    if (OnAirChanged != null)
+                        OnAirChanged(this, null);
+                    break;
+
+                case (_BMDSwitcherDownstreamKeyEventType.bmdSwitcherDownstreamKeyEventTypePreMultipliedChanged):
+                    if (PreMultipliedChanged != null)
+                        PreMultipliedChanged(this, null);
+                    break;
+
+                case (_BMDSwitcherDownstreamKeyEventType.bmdSwitcherDownstreamKeyEventTypeRateChanged):
+                    if (RateChanged != null)
+                        RateChanged(this, null);
+                    break;
+
+                case (_BMDSwitcherDownstreamKeyEventType.bmdSwitcherDownstreamKeyEventTypeTieChanged):
+                    if (TieChanged != null)
+                        TieChanged(this, null);
+                    break;
+            }
+        }
+    }
+
 }
