@@ -68,7 +68,7 @@ namespace Trinity_ATEM_Switcher
             SwitcherDisconnected();		// start with switcher disconnected
 
             _BMDSwitcherConnectToFailure failReason = 0;
-            string address = "192.168.30.6";
+            string address = "192.168.30.8";
 
             try
             {
@@ -533,20 +533,20 @@ namespace Trinity_ATEM_Switcher
                         }
                         if (AUXCount == 3)
                         {
-
+                            //UpdateAudio options --  6=input 6 (Slid/mixer out), 1=input 1 (Ann/broadcast computer). 1201=input RCA (slides computer)
                             switch (lvSource)
                             {
 
                                 case 1:
                                     Console.WriteLine("2");
                                     aux2But2.IsChecked = true;
-                                    UpdateAudio(1201, 6);
+                                    UpdateAudio(1, 6);
                                     aux2But10.IsChecked = true;
                                     break;
 
                                 case 10010:
                                     aux2But1.IsChecked = true;
-                                    UpdateAudio(6, 1201);
+                                    UpdateAudio(6, 1);
                                     aux2But9.IsChecked = true;
                                     break;
                                 case 3010:
@@ -1117,6 +1117,20 @@ namespace Trinity_ATEM_Switcher
             }
         }
 
+        private void Aux_Click_Macro(object sender, RoutedEventArgs e)
+        {
+            var button = sender as Button;
+            uint macroIndex = Convert.ToUInt32(button.Tag);
+            RunMacro(macroIndex);
+        }
+
+        private void RunMacro(uint macroIndex)
+        {
+            IBMDSwitcherMacroControl m_macrocontrol;
+            m_macrocontrol = (BMDSwitcherAPI.IBMDSwitcherMacroControl)m_switcher;
+
+            m_macrocontrol.Run(macroIndex);
+        }
     }
 
 

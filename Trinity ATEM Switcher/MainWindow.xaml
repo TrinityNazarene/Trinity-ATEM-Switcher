@@ -613,16 +613,18 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-                <RadioButton Style="{StaticResource YellowToggleButton}" GroupName="aux2Group2" x:Name="aux2But9" Grid.Column="0" Tag="6,1201" Click="Aux_Click_Audio" FontWeight="Bold" FontSize="18" Foreground="#FFCCCCCC">
+                <!-- Tag values on,off ... 6=input 6 (Slid/mixer out), 1=input 1 (Ann/broadcast computer). 1201=input RCA (slides computer) -->
+                <RadioButton Style="{StaticResource YellowToggleButton}" GroupName="aux2Group2" x:Name="aux2But9" Grid.Column="0" Tag="6,1" Click="Aux_Click_Audio" FontWeight="Bold" FontSize="18" Foreground="#FFCCCCCC">
                     <RadioButton.Background>
                         <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                             <GradientStop Color="#FF565656" Offset="0"/>
                             <GradientStop Color="#FF323232" Offset="1"/>
                         </LinearGradientBrush>
-                    </RadioButton.Background> Sacuary Audio
+                    </RadioButton.Background> Sanctuary Audio
                 </RadioButton>
-                <RadioButton Style="{StaticResource YellowToggleButton}" GroupName="aux2Group2" x:Name="aux2But10" Grid.Column="1" Tag="1201,6" Click="Aux_Click_Audio" FontWeight="Bold" FontSize="18" Foreground="#FFCCCCCC">
+                <RadioButton Style="{StaticResource YellowToggleButton}" GroupName="aux2Group2" x:Name="aux2But10" Grid.Column="1" Tag="1,6" Click="Aux_Click_Audio" FontWeight="Bold" FontSize="18" Foreground="#FFCCCCCC">
                     <RadioButton.Background>
                         <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                             <GradientStop Color="#FF565656" Offset="0"/>
@@ -630,6 +632,15 @@
                         </LinearGradientBrush>
                     </RadioButton.Background> Spotify Audio
                 </RadioButton>
+                <!-- Separate button to trigger a Macro. -->
+                <Button x:Name="aux2But11" Grid.Column="2" Tag="0" Click="Aux_Click_Macro" FontWeight="Bold" FontSize="18" Foreground="#FFCCCCCC" Opacity="0.5" Content="Macro: Studio">
+                    <Button.Background>
+                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                            <GradientStop Color="#FF565656" Offset="0"/>
+                            <GradientStop Color="#FF323232" Offset="1"/>
+                        </LinearGradientBrush>
+                    </Button.Background>
+                </Button>
             </Grid>
         </Grid>
         <Grid Grid.Row="2" Grid.Column="1" Margin="10,80,10,10">
