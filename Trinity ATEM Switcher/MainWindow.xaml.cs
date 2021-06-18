@@ -221,6 +221,9 @@ namespace Trinity_ATEM_Switcher
             updateProgPrevUI(currentPreview, false);
             updateProgPrevUI(currentProgram, true);
             UpdateAuxSourceCombos();
+
+            MidiListener midi = new MidiListener();
+            midi.StartListening(this);
         }
 
 
@@ -253,8 +256,8 @@ namespace Trinity_ATEM_Switcher
                 switch (inputId)
                 {
                     case 1:
-                        progBut6.Content = inputName;
-                        prevBut6.Content = inputName;
+                        //progBut6.Content = inputName;
+                        //prevBut6.Content = inputName;
                         break;
                     case 2:
                         progBut1.Content = inputName;
@@ -539,18 +542,18 @@ namespace Trinity_ATEM_Switcher
 
                                 case 1:
                                     Console.WriteLine("2");
-                                    aux2But2.IsChecked = true;
-                                    UpdateAudio(1, 6);
-                                    aux2But10.IsChecked = true;
+                                    //aux2But2.IsChecked = true;
+                                    //UpdateAudio(1, 6);
+                                    aux2But8.IsChecked = true;
                                     break;
 
                                 case 10010:
                                     aux2But1.IsChecked = true;
-                                    UpdateAudio(6, 1);
-                                    aux2But9.IsChecked = true;
+                                    //UpdateAudio(6, 1);
+                                    //aux2But9.IsChecked = true;
                                     break;
                                 case 3010:
-                                    aux2But2.IsChecked = true;
+                                    //aux2But2.IsChecked = true;
 
                                     break;
                                 case 2:
@@ -669,7 +672,7 @@ namespace Trinity_ATEM_Switcher
             }
         }
 
-        private void keyWordsBut_Click(object sender, RoutedEventArgs e)
+        private void keyGreenScreenBut_Click(object sender, RoutedEventArgs e)
         {
             if (currentKey == -1)
             {
@@ -694,15 +697,15 @@ namespace Trinity_ATEM_Switcher
                 System.Threading.Thread.Sleep(100);
                 m_transition.SetNextTransitionSelection(_BMDSwitcherTransitionSelection.bmdSwitcherTransitionSelectionBackground);
                 currentKey = 1;
-                currentkeyBut = keyWordsBut;
+                currentkeyBut = keyGreenScreenBut;
             }
             else
             {
-                keyWordsBut.IsChecked = false;
+                keyGreenScreenBut.IsChecked = false;
                 currentkeyBut.IsChecked = true;
                 if (currentKey == 1)
                 {
-                    keyWordsBut.IsChecked = true;
+                    keyGreenScreenBut.IsChecked = true;
                 }
             }
 
@@ -723,7 +726,7 @@ namespace Trinity_ATEM_Switcher
                 {
                     case 1:
                         m_transition.SetNextTransitionSelection(_BMDSwitcherTransitionSelection.bmdSwitcherTransitionSelectionBackground + 1);
-                        keyWordsBut.IsChecked = false;
+                        keyGreenScreenBut.IsChecked = false;
 
                         break;
                     case 2:
@@ -736,7 +739,7 @@ namespace Trinity_ATEM_Switcher
                         break;
                     case 4:
                         m_transition.SetNextTransitionSelection(_BMDSwitcherTransitionSelection.bmdSwitcherTransitionSelectionKey4);
-                        keyGreenScreenBut.IsChecked = false;
+                        keyWordsBut.IsChecked = false;
                         break;
                 }
 
@@ -918,7 +921,7 @@ namespace Trinity_ATEM_Switcher
 
         }
 
-        private void keyGreenScreenBut_Click(object sender, RoutedEventArgs e)
+        private void keyWordsBut_Click(object sender, RoutedEventArgs e)
         {
 
             if (currentKey == -1)
@@ -945,15 +948,15 @@ namespace Trinity_ATEM_Switcher
                 System.Threading.Thread.Sleep(100);
                 m_transition.SetNextTransitionSelection(_BMDSwitcherTransitionSelection.bmdSwitcherTransitionSelectionBackground);
                 currentKey = 4;
-                currentkeyBut = keyGreenScreenBut;
+                currentkeyBut = keyWordsBut;
             }
             else
             {
-                keyGreenScreenBut.IsChecked = false;
+                keyWordsBut.IsChecked = false;
                 currentkeyBut.IsChecked = true;
                 if (currentKey == 4)
                 {
-                    keyGreenScreenBut.IsChecked = true;
+                    keyWordsBut.IsChecked = true;
                 }
 
             }
@@ -1021,6 +1024,13 @@ namespace Trinity_ATEM_Switcher
         private void OnNextTransitionStyleChanged()
         {
             Console.WriteLine("Key test");
+        }
+
+        public void ClickButton(System.Windows.Controls.Primitives.ButtonBase button)
+        {
+            this.Dispatcher.Invoke((Action)(() => 
+                button.RaiseEvent(new RoutedEventArgs(Button.ClickEvent))
+            ));
         }
 
         private void UpdateProgramButtonSelection()
